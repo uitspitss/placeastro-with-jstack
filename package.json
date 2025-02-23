@@ -9,8 +9,10 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
-    "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "format": "biome format ./src",
+    "lint": "biome lint ./src",
+    "check": "biome check ./src"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.0",
@@ -29,6 +31,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20240815.0",
     "@types/node": "^22.10.6",
     "@types/react": "^19.0.7",
