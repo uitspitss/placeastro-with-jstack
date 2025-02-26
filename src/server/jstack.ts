@@ -1,9 +1,8 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
+import { drizzle } from 'drizzle-orm/d1';
 import { env } from 'hono/adapter';
 import { jstack } from 'jstack';
-
 interface Env {
-  Bindings: { DATABASE_URL: string };
+  Bindings: { DB: D1Database };
 }
 
 export const j = jstack.init<Env>();
@@ -16,9 +15,9 @@ export const j = jstack.init<Env>();
  * @see https://developers.cloudflare.com/workers/tutorials/postgres/
  */
 const databaseMiddleware = j.middleware(async ({ c, next }) => {
-  const { DATABASE_URL } = env(c);
+  const { DB } = env(c);
 
-  const db = drizzle(DATABASE_URL);
+  const db = drizzle(DB);
 
   return await next({ db });
 });

@@ -8,17 +8,17 @@ export const RecentPost = () => {
   const [name, setName] = useState<string>('');
   const queryClient = useQueryClient();
 
-  const { data: recentPost, isPending: isLoadingPosts } = useQuery({
+  const { data: placeImages, isPending: isLoadingPosts } = useQuery({
     queryKey: ['get-recent-post'],
     queryFn: async () => {
-      const res = await client.post.recent.$get();
+      const res = await client.placeImages.list.$get();
       return await res.json();
     },
   });
 
   const { mutate: createPost, isPending } = useMutation({
     mutationFn: async ({ name }: { name: string }) => {
-      const res = await client.post.create.$post({ name });
+      const res = await client.placeImages.create.$post({ name });
       return await res.json();
     },
     onSuccess: async () => {
@@ -31,9 +31,9 @@ export const RecentPost = () => {
     <div className="w-full max-w-sm backdrop-blur-lg bg-black/15 px-8 py-6 rounded-md text-zinc-100/75 space-y-2">
       {isLoadingPosts ? (
         <p className="text-[#ececf399] text-base/6">Loading posts...</p>
-      ) : recentPost ? (
+      ) : placeImages ? (
         <p className="text-[#ececf399] text-base/6">
-          Your recent post: "{recentPost.name}"
+          Your recent post: "{placeImages.length}"
         </p>
       ) : (
         <p className="text-[#ececf399] text-base/6">You have no posts yet.</p>
