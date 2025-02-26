@@ -3,10 +3,10 @@ import { createClient } from 'jstack';
 
 const getBaseUrl = () => {
   if (process.env.NODE_ENV === 'production') {
-    return `https://${process.env.API_HOST}`;
+    return `https://${process.env.NEXT_PUBLIC_API_HOST}`;
   }
 
-  return `http://${process.env.API_HOST}`;
+  return `http://${process.env.NEXT_PUBLIC_API_HOST}`;
 };
 
 /**
@@ -14,7 +14,5 @@ const getBaseUrl = () => {
  * @see https://jstack.app/docs/backend/api-client
  */
 export const client = createClient<AppRouter>({
-  // baseUrl: `${getBaseUrl()}/api`,
-  baseUrl: 'http://localhost:8080/api',
-  // baseUrl: 'https://placeastro.fruition-test-u7s.workers.dev/api',
+  baseUrl: `${getBaseUrl()}/api`,
 });
