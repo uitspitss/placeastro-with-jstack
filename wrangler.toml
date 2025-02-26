@@ -1,6 +1,15 @@
-name = "app-name"
-compatibility_date = "2024-08-06"
+name = "placeastro"
+compatibility_flags = [ "nodejs_compat" ]
+compatibility_date = "2024-09-23"
 main = "src/server/index.ts"
 
 [dev]
 port = 8080
+
+[vars]
+API_HOST="placeastro.fruition-test-u7s.workers.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "placeastro"
+database_id = "70989b4b-a247-4d39-8298-5b737ae62966"
