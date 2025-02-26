@@ -1,7 +1,7 @@
 'use client';
 
-import { client } from '@/lib/client';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { getClient } from '@/lib/client';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
 export const RecentPost = () => {
@@ -11,7 +11,7 @@ export const RecentPost = () => {
   const { data: placeImages, isPending: isLoadingPosts } = useQuery({
     queryKey: ['get-recent-post'],
     queryFn: async () => {
-      const res = await client.placeImages.list.$get();
+      const res = await getClient().placeImages.list.$get();
       return await res.json();
     },
   });
