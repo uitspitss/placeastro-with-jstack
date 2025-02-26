@@ -12,7 +12,7 @@ export const placeImageRouter = j.router({
       .from(placeImages)
       .orderBy(desc(placeImages.createdAt));
 
-    return c.superjson(images ?? null);
+    return c.superjson(images);
   }),
 
   create: publicProcedure

@@ -14,5 +14,7 @@ const getBaseUrl = () => {
  * @see https://jstack.app/docs/backend/api-client
  */
 export const client = createClient<AppRouter>({
-  baseUrl: `${getBaseUrl()}/api`,
+  // baseUrl: `${getBaseUrl()}/api`,
+  baseUrl: 'http://localhost:8080/api',
+  // baseUrl: 'https://placeastro.fruition-test-u7s.workers.dev/api',
 });

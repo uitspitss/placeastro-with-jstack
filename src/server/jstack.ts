@@ -1,4 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1';
+import { drizzle as drizzleBS3 } from 'drizzle-orm/better-sqlite3';
 import { env } from 'hono/adapter';
 import { jstack } from 'jstack';
 interface Env {
@@ -17,8 +18,12 @@ export const j = jstack.init<Env>();
 const databaseMiddleware = j.middleware(async ({ c, next }) => {
   const { DB } = env(c);
 
-  const db = drizzle(DB);
+  if (process.env.LOCAL_DB_PATH) {
+    const db = drizzleBS3(process.env.LOCAL_DB_PATH);
+    return await next({ db });
+  }
 
+  const db = drizzle(DB);
   return await next({ db });
 });
 
