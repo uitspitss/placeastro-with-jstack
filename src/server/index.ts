@@ -2,13 +2,6 @@ import { j } from './jstack';
 import { cors } from 'hono/cors';
 import { placeImageRouter } from './routers/place-image-router';
 
-const appCors = cors({
-  allowHeaders: ['x-is-superjson'],
-  exposeHeaders: ['x-is-superjson'],
-  origin: `${process.env.APP_URL}`, // default: allow any origin
-  credentials: true, // default: allow credentials
-});
-
 /**
  * This is your base API.
  * Here, you can handle errors, not-found responses, cors and more.
@@ -18,7 +11,16 @@ const appCors = cors({
 const api = j
   .router()
   .basePath('/api')
-  .use(appCors)
+  .use('*', async (c, next) => {
+    const corsMiddleware = cors({
+      allowHeaders: ['x-is-superjson'],
+      exposeHeaders: ['x-is-superjson'],
+      // @ts-ignore
+      origin: `${c.env.CORS_ORIGIN}`,
+      credentials: true,
+    });
+    return corsMiddleware(c, next);
+  })
   .onError(j.defaults.errorHandler);
 
 /**

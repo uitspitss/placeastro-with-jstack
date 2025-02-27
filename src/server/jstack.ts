@@ -3,7 +3,7 @@ import { drizzle as drizzleBS3 } from 'drizzle-orm/better-sqlite3';
 import { env } from 'hono/adapter';
 import { jstack } from 'jstack';
 interface Env {
-  Bindings: { DB: D1Database };
+  Bindings: { DB: D1Database; CORS_ORIGIN: string };
 }
 
 export const j = jstack.init<Env>();
