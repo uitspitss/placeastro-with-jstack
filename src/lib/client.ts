@@ -18,7 +18,7 @@ const getBaseUrl = () => {
 //   baseUrl: `${getBaseUrl()}/api`,
 // });
 
-export const getClient = () =>
+export const getClient = async () =>
   createClient<AppRouter>({
     baseUrl: `${getBaseUrl()}/api`,
   });
