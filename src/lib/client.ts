@@ -8,5 +8,8 @@ import { createClient } from 'jstack';
 
 export const getClient = () =>
   createClient<AppRouter>({
-    baseUrl: '/api',
+    baseUrl:
+      process.env.NODE_ENV === 'production'
+        ? 'https://placeastro-server.fruition-test-u7s.workers.dev/api'
+        : `${process.env.NEXT_PUBLIC_API_URL}/api`,
   });
