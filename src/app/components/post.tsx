@@ -11,7 +11,8 @@ export const RecentPost = () => {
   const { data: placeImages, isPending: isLoadingPosts } = useQuery({
     queryKey: ['get-recent-post'],
     queryFn: async () => {
-      const res = await getClient().placeImages.list.$get();
+      const client = await getClient();
+      const res = await client.placeImages.list.$get();
       return await res.json();
     },
   });
