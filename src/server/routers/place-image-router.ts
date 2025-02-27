@@ -4,6 +4,10 @@ import { z } from 'zod';
 import { j, publicProcedure } from '../jstack';
 
 export const placeImageRouter = j.router({
+  health: publicProcedure.query(async ({ c }) => {
+    return c.superjson('OK');
+  }),
+
   list: publicProcedure.query(async ({ c, ctx }) => {
     const { db } = ctx;
 
