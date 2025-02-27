@@ -10,6 +10,10 @@ port = 3000
 [vars]
 NEXT_PUBLIC_API_HOST="placeastro-server.fruition-test-u7s.workers.dev"
 
+[[kv_namespaces]]
+binding = "NEXT_CACHE_WORKERS_KV"
+id = "d952e1399f6f4523b0c6ee5bce3945cb"
+
 [observability]
 enabled = true
 head_sampling_rate = 1 # optional. default = 1.
