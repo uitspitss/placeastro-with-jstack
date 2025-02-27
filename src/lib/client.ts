@@ -14,11 +14,8 @@ const getBaseUrl = () => {
  * Your type-safe API client
  * @see https://jstack.app/docs/backend/api-client
  */
-export const client = createClient<AppRouter>({
-  baseUrl: `${getBaseUrl()}/api`,
-});
 
-// export const getClient = async () =>
-//   createClient<AppRouter>({
-//     baseUrl: `${getBaseUrl()}/api`,
-//   });
+export const getClient = () =>
+  createClient<AppRouter>({
+    baseUrl: `${getBaseUrl()}/api`,
+  });
