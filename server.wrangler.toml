@@ -10,3 +10,7 @@ port = 8080
 binding = "DB"
 database_name = "placeastro"
 database_id = "70989b4b-a247-4d39-8298-5b737ae62966"
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
