@@ -1,5 +1,13 @@
 import { j } from './jstack';
+import { cors } from 'hono/cors';
 import { placeImageRouter } from './routers/place-image-router';
+
+const appCors = cors({
+  allowHeaders: ['x-is-superjson'],
+  exposeHeaders: ['x-is-superjson'],
+  origin: `${process.env.APP_URL}`, // default: allow any origin
+  credentials: true, // default: allow credentials
+});
 
 /**
  * This is your base API.
@@ -10,7 +18,7 @@ import { placeImageRouter } from './routers/place-image-router';
 const api = j
   .router()
   .basePath('/api')
-  .use(j.defaults.cors)
+  .use(appCors)
   .onError(j.defaults.errorHandler);
 
 /**
