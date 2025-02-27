@@ -6,6 +6,7 @@ import { createClient } from 'jstack';
  * @see https://jstack.app/docs/backend/api-client
  */
 
-export const client = createClient<AppRouter>({
-  baseUrl: `${window.location.href}/api`,
-});
+export const getClient = () =>
+  createClient<AppRouter>({
+    baseUrl: `${process.env.API_URL}/api`,
+  });
