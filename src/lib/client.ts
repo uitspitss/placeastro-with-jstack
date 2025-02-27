@@ -3,8 +3,8 @@ import { createClient } from 'jstack';
 
 const getBaseUrl = () => {
   if (process.env.NODE_ENV === 'production') {
-    return 'https://placeastro-server.fruition-test-u7s.workers.dev';
-    // return `https://${process.env.NEXT_PUBLIC_API_HOST}`;
+    // return 'https://placeastro-server.fruition-test-u7s.workers.dev';
+    return `https://${process.env.NEXT_PUBLIC_API_HOST}`;
   }
 
   return `http://${process.env.NEXT_PUBLIC_API_HOST}`;
