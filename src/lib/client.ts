@@ -8,5 +8,5 @@ import { createClient } from 'jstack';
 
 export const getClient = () =>
   createClient<AppRouter>({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+    baseUrl: '/api',
   });
