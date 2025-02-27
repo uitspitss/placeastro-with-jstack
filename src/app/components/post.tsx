@@ -58,6 +58,7 @@ export const RecentPost = () => {
           onChange={(e) => setName(e.target.value)}
           className="w-full text-base/6 rounded-md bg-black/50 hover:bg-black/75 focus-visible:outline-none ring-2 ring-transparent  hover:ring-zinc-800 focus:ring-zinc-800 focus:bg-black/75 transition h-12 px-4 py-2 text-zinc-100"
         />
+        <p>API_URL:{process.env.NEXT_PUBLIC_API_URL}</p>
         <button
           // disabled={isPending}
           type="submit"
