@@ -2,13 +2,12 @@ import type { AppRouter } from '@/server';
 import { createClient } from 'jstack';
 
 const getBaseUrl = () => {
-  console.log('NEXT_PUBLIC_API_HOST', process.env.NEXT_PUBLIC_API_HOST);
+  console.log('API_URL', process.env.API_URL);
   if (process.env.NODE_ENV === 'production') {
-    // return 'https://placeastro-server.fruition-test-u7s.workers.dev';
-    return `https://${process.env.NEXT_PUBLIC_API_HOST}`;
+    return process.env.API_URL;
   }
 
-  return `http://${process.env.NEXT_PUBLIC_API_HOST}`;
+  return `http://${process.env.API_URL}`;
 };
 
 /**

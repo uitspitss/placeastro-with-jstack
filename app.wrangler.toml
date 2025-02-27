@@ -8,7 +8,7 @@ assets = { directory = ".open-next/assets", binding = "ASSETS" }
 port = 3000
 
 [vars]
-NEXT_PUBLIC_API_HOST="placeastro-server.fruition-test-u7s.workers.dev"
+API_URL="https://placeastro-server.fruition-test-u7s.workers.dev"
 
 [[kv_namespaces]]
 binding = "NEXT_CACHE_WORKERS_KV"
