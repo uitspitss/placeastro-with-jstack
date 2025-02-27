@@ -6,6 +6,9 @@ main = "src/server/index.ts"
 [dev]
 port = 8080
 
+[vars]
+APP_URL = "https://placeastro.fruition-test-u7s.workers.dev"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "placeastro"
