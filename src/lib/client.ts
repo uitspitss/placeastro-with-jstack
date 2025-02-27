@@ -2,6 +2,7 @@ import type { AppRouter } from '@/server';
 import { createClient } from 'jstack';
 
 const getBaseUrl = () => {
+  console.log('NEXT_PUBLIC_API_HOST', process.env.NEXT_PUBLIC_API_HOST);
   if (process.env.NODE_ENV === 'production') {
     // return 'https://placeastro-server.fruition-test-u7s.workers.dev';
     return `https://${process.env.NEXT_PUBLIC_API_HOST}`;
@@ -14,11 +15,11 @@ const getBaseUrl = () => {
  * Your type-safe API client
  * @see https://jstack.app/docs/backend/api-client
  */
-// export const client = createClient<AppRouter>({
-//   baseUrl: `${getBaseUrl()}/api`,
-// });
+export const client = createClient<AppRouter>({
+  baseUrl: `${getBaseUrl()}/api`,
+});
 
-export const getClient = async () =>
-  createClient<AppRouter>({
-    baseUrl: `${getBaseUrl()}/api`,
-  });
+// export const getClient = async () =>
+//   createClient<AppRouter>({
+//     baseUrl: `${getBaseUrl()}/api`,
+//   });
