@@ -9,3 +9,7 @@ port = 3000
 
 [vars]
 NEXT_PUBLIC_API_HOST="placeastro-server.fruition-test-u7s.workers.dev"
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
