@@ -4,7 +4,7 @@ compatibility_flags = [ "nodejs_compat" ]
 main = "src/server/index.ts"
 
 routes = [
-  { pattern = "api.placeastro.u7s.dev", custom_domain = true },
+  { pattern = "placeastro-api.u7s.dev", custom_domain = true },
 ]
 
 [dev]
