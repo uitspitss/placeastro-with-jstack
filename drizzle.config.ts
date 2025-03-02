@@ -1,11 +1,15 @@
 import type { Config } from 'drizzle-kit';
 import 'dotenv/config';
 
-const prodConfig = {
-  out: './drizzle',
-  schema: './src/server/db/schema.ts',
-  driver: 'd1-http',
+const baseConfig = {
   dialect: 'sqlite',
+  schema: ['./src/server/db/schema.ts', './src/server/db/auth-schema.ts'],
+} satisfies Config;
+
+const prodConfig = {
+  ...baseConfig,
+  out: './drizzle',
+  driver: 'd1-http',
   dbCredentials: {
     accountId: process.env.CLOUDFLARE_ACCOUNT_ID as string,
     databaseId: process.env.CLOUDFLARE_DATABASE_ID as string,
@@ -13,8 +17,7 @@ const prodConfig = {
   },
 } satisfies Config;
 const localConfig = {
-  schema: './src/server/db/schema.ts',
-  dialect: 'sqlite',
+  ...baseConfig,
   dbCredentials: {
     url: process.env.LOCAL_DB_PATH as string,
   },
