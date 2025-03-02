@@ -5,12 +5,9 @@
   "scripts": {
     "dev": "run-p app:dev server:dev:worker db:studio",
     "app:dev": "next dev",
-    "build": "next build",
+    "app:build": "next build",
     "app:start": "next start",
-    "app:build:worker": "opennextjs-cloudflare --skipWranglerConfigCheck",
-    "app:dev:worker": "wrangler dev --local --config app.wrangler.toml",
-    "app:preview:worker": "run-s app:build:worker app:dev:worker",
-    "server:dev:worker": "wrangler dev --local --config server.wrangler.toml",
+    "server:dev:worker": "wrangler dev --local",
     "db:generate:prod": "drizzle-kit generate",
     "db:migrate:prod": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -39,7 +36,6 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20240815.0",
-    "@opennextjs/cloudflare": "^0.5.4",
     "@types/better-sqlite3": "^7.6.12",
     "@types/node": "^22.10.6",
     "@types/react": "^19.0.7",
