@@ -1,7 +1,9 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { drizzle as drizzleBS3 } from 'drizzle-orm/better-sqlite3';
 import { env } from 'hono/adapter';
-import { jstack } from 'jstack';
+import { type InferMiddlewareOutput, jstack } from 'jstack';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 interface Env {
   Bindings: { DB: D1Database; CORS_ORIGIN: string };
 }
@@ -15,21 +17,37 @@ export const j = jstack.init<Env>();
  * For deployment to Cloudflare Workers
  * @see https://developers.cloudflare.com/workers/tutorials/postgres/
  */
-const databaseMiddleware = j.middleware(async ({ c, next }) => {
+const databaseMiddleware = j.middleware(async ({ c, ctx, next }) => {
   const { DB } = env(c);
 
-  if (process.env.LOCAL_DB_PATH) {
-    const db = drizzleBS3(process.env.LOCAL_DB_PATH);
-    return await next({ db });
-  }
+  const db = process.env.LOCAL_DB_PATH
+    ? drizzleBS3(process.env.LOCAL_DB_PATH)
+    : drizzle(DB);
 
-  const db = drizzle(DB);
   return await next({ db });
 });
+type DatabaseMiddlewareOutput = InferMiddlewareOutput<
+  typeof databaseMiddleware
+>;
+
+const authMiddleware = j.middleware(async ({ c, ctx, next }) => {
+  const { db } = ctx as DatabaseMiddlewareOutput;
+
+  const auth = betterAuth({
+    database: drizzleAdapter(db, {
+      provider: 'sqlite',
+    }),
+  });
+
+  await next({ auth });
+});
+type AuthMiddlewareOutput = InferMiddlewareOutput<typeof authMiddleware>;
 
 /**
  * Public (unauthenticated) procedures
  *
  * This is the base piece you use to build new queries and mutations on your API.
  */
-export const publicProcedure = j.procedure.use(databaseMiddleware);
+export const publicProcedure = j.procedure
+  .use(databaseMiddleware)
+  .use(authMiddleware);

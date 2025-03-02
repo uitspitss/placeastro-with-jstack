@@ -6,7 +6,21 @@
       "idx": 0,
       "version": "6",
       "when": 1740547424277,
-      "tag": "0000_mature_emma_frost",
+      "tag": "0000_init",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1740944550930,
+      "tag": "0001_add_auth",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1740945798313,
+      "tag": "0002_rename_auth",
       "breakpoints": true
     }
   ]
