@@ -12,6 +12,8 @@ port = 8080
 
 [vars]
 CORS_ORIGIN = "https://placeastro.u7s.dev"
+BETTER_AUTH_URL= "https://placeastro.u7s.dev"
+BETTER_AUTH_SECRET= "iBuZFY0aPzHxJlbzi5MjjYlNw3DnEQ2w"
 
 [[d1_databases]]
 binding = "DB"
