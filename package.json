@@ -3,22 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm run set-local-env && run-p app:dev server:dev:worker db:studio",
+    "dev": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) && run-p app:dev server:dev:worker db:studio",
     "set-local-env": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit)",
-    "app:dev": "next dev",
+    "app:dev": "NODE_OPTIONS='--inspect' next dev",
     "app:build": "next build",
     "app:start": "next start",
     "server:dev:worker": "wrangler dev --local",
     "db:generate": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit generate",
     "db:migrate": "wrangler d1 execute placeastro --local",
-    "db:generate:prod": "drizzle-kit generate",
-    "db:migrate:prod": "drizzle-kit migrate",
+    "db:migrate:prod": "cross-env NODE_ENV=production drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "cross-env LOCAL_DB_PATH=$(find .wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
-    "db:studio:prod": "drizzle-kit studio",
+    "db:studio:prod": "cross-env NODE_ENV=production drizzle-kit studio",
     "format": "biome format .",
     "lint": "biome lint .",
-    "check": "biome check ."
+    "check": "biome check .",
+    "wrangler:types": "wrangler types && mv worker-configuration.d.ts src/types/worker-configuration.d.ts && sed -i '' 's/interface/export interface/' src/types/worker-configuration.d.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.0.0",

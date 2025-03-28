@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "256a09b5-a40e-4a4c-a1d6-63b9a5723787",
+  "id": "e8e466e1-8614-4888-bafe-dca7dcf34b27",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "place_images": {
@@ -49,13 +49,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "creator_id": {
-          "name": "creator_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "text",
@@ -94,59 +87,6 @@
             "catalogue_number"
           ],
           "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "place_images_creator_id_users_id_fk": {
-          "name": "place_images_creator_id_users_id_fk",
-          "tableFrom": "place_images",
-          "tableTo": "users",
-          "columnsFrom": [
-            "creator_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
-    "users": {
-      "name": "users",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "email": {
-          "name": "email",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "email_idx": {
-          "name": "email_idx",
-          "columns": [
-            "email"
-          ],
-          "isUnique": true
         }
       },
       "foreignKeys": {},
