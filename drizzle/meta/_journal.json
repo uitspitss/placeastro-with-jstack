@@ -5,22 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1740547424277,
+      "when": 1743100834821,
       "tag": "0000_init",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1740944550930,
-      "tag": "0001_add_auth",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1740945798313,
-      "tag": "0002_rename_auth",
+      "when": 1743101155713,
+      "tag": "0001_auth",
       "breakpoints": true
     }
   ]
