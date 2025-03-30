@@ -1,8 +1,8 @@
-import { betterAuth, type BetterAuthOptions } from 'better-auth';
+import * as schema from '@/server/db/auth-schema';
+import { type BetterAuthOptions, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { drizzle } from 'drizzle-orm/d1';
-import * as schema from '@/server/db/auth-schema';
-import type { Context } from 'hono';
+import type { ServerContext } from '../jstack';
 
 const baseConfig = {
   emailAndPassword: {
@@ -10,7 +10,7 @@ const baseConfig = {
   },
 } satisfies BetterAuthOptions;
 
-export const createAuth = (c: Context) => {
+export const createAuth = (c: ServerContext) => {
   const db = drizzle(c.env.DB);
 
   const auth = betterAuth({

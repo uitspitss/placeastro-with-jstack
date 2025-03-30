@@ -1,8 +1,11 @@
 import type { Env } from '@/types/worker-configuration';
 import { drizzle } from 'drizzle-orm/d1';
+import type { Context } from 'hono';
 import { env } from 'hono/adapter';
 import { type InferMiddlewareOutput, jstack } from 'jstack';
 import { createAuth } from './lib/auth';
+
+export type ServerContext = Context<{ Bindings: Env }>;
 
 export const j = jstack.init<{ Bindings: Env }>();
 

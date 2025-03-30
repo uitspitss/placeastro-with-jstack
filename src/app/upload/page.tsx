@@ -1,6 +1,11 @@
+import { PlaceImageUploadForm } from '../components/place-upload-form';
+
 const UploadPage = () => {
-  // return <PlaceImageUploadForm />;
-  return <p>upload</p>;
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+      <PlaceImageUploadForm />
+    </div>
+  );
 };
 
 export default UploadPage;

@@ -14,11 +14,16 @@ port = 8080
 CORS_ORIGIN = "https://placeastro.u7s.dev"
 BETTER_AUTH_URL= "https://placeastro.u7s.dev"
 BETTER_AUTH_SECRET= "iBuZFY0aPzHxJlbzi5MjjYlNw3DnEQ2w"
+IMGIX_HOSTNAME = "placeastro-r2.imgix.net"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "placeastro"
 database_id = "cea447ae-8fa0-4755-a225-bfb55009d411"
+
+[[r2_buckets]]
+binding = 'R2'
+bucket_name = 'placeastro'
 
 [observability]
 enabled = true

@@ -1,7 +1,7 @@
 import { env } from 'hono/adapter';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { j } from './jstack';
+import { type ServerContext, j } from './jstack';
 import { createAuth } from './lib/auth';
 import { placeImageRouter } from './routers/place-image-router';
 
@@ -15,7 +15,7 @@ const api = j
   .router()
   .basePath('/api')
   .use(logger())
-  .use('/auth/*', async (c, next) => {
+  .use('/auth/*', async (c: ServerContext, next) => {
     const { CORS_ORIGIN } = env(c);
 
     const corsMiddleware = cors({
@@ -28,18 +28,19 @@ const api = j
     });
     return corsMiddleware(c, next);
   })
-  .use('*', async (c, next) => {
+  .use('*', async (c: ServerContext, next) => {
     const { CORS_ORIGIN } = env(c);
 
     const corsMiddleware = cors({
       origin: `${CORS_ORIGIN}`,
-      allowHeaders: ['x-is-superjson'],
+      allowHeaders: ['x-is-superjson', 'Content-Type'],
+      allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT'],
       exposeHeaders: ['x-is-superjson'],
       credentials: true,
     });
     return corsMiddleware(c, next);
   })
-  .use('*', async (c, next) => {
+  .use('*', async (c: ServerContext, next) => {
     const auth = createAuth(c);
     c.set('auth', auth);
 

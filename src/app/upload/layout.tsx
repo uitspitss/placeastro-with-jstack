@@ -37,13 +37,7 @@ const UploadLayout = ({ children }: Props) => {
 
   return (
     <div>
-      <header>
-        <h1>Upload Page</h1>
-      </header>
       <main>{children}</main>
-      <footer>
-        <p>Data fetched: {JSON.stringify(session)}</p>
-      </footer>
     </div>
   );
 };
