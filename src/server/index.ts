@@ -1,9 +1,9 @@
-import { j } from './jstack';
+import { env } from 'hono/adapter';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { placeImageRouter } from './routers/place-image-router';
+import { j } from './jstack';
 import { createAuth } from './lib/auth';
-import type { Env } from '@/types/worker-configuration';
+import { placeImageRouter } from './routers/place-image-router';
 
 /**
  * This is your base API.
@@ -14,8 +14,9 @@ import type { Env } from '@/types/worker-configuration';
 const api = j
   .router()
   .basePath('/api')
+  .use(logger())
   .use('/auth/*', async (c, next) => {
-    const { CORS_ORIGIN } = c.env as Env;
+    const { CORS_ORIGIN } = env(c);
 
     const corsMiddleware = cors({
       origin: `${CORS_ORIGIN}`,
@@ -28,7 +29,7 @@ const api = j
     return corsMiddleware(c, next);
   })
   .use('*', async (c, next) => {
-    const { CORS_ORIGIN } = c.env as Env;
+    const { CORS_ORIGIN } = env(c);
 
     const corsMiddleware = cors({
       origin: `${CORS_ORIGIN}`,
@@ -41,12 +42,11 @@ const api = j
   .use('*', async (c, next) => {
     const auth = createAuth(c);
     c.set('auth', auth);
-    return next();
+
+    return await next();
   })
-  .use(logger())
   .on(['POST', 'GET'], '/auth/*', async (c) => {
-    const response = c.get('auth').handler(c.req.raw);
-    return response;
+    return c.get('auth').handler(c.req.raw);
   })
   .onError(j.defaults.errorHandler);
 

@@ -1,8 +1,8 @@
+import type { Env } from '@/types/worker-configuration';
 import { drizzle } from 'drizzle-orm/d1';
 import { env } from 'hono/adapter';
 import { type InferMiddlewareOutput, jstack } from 'jstack';
 import { createAuth } from './lib/auth';
-import type { Env } from '@/types/worker-configuration';
 
 export const j = jstack.init<{ Bindings: Env }>();
 
@@ -26,7 +26,7 @@ type DatabaseMiddlewareOutput = InferMiddlewareOutput<
 const authMiddleware = j.middleware(async ({ c, ctx, next }) => {
   const auth = createAuth(c);
 
-  await next({ auth });
+  return await next({ auth });
 });
 type AuthMiddlewareOutput = InferMiddlewareOutput<typeof authMiddleware>;
 

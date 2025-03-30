@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { signUp } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
-import { authClient } from '@/lib/auth-client';
+import { type FormEvent, useState } from 'react';
 
 const Page = () => {
-
-
   const [formData, setFormData] = useState({
     email: '',
     name: '',
@@ -48,7 +46,7 @@ const Page = () => {
       // await new Promise((resolve) => setTimeout(resolve, 1000));
       // router.push('/welcome');
 
-      const { data, error } = await authClient.signUp.email(formData, {
+      const { data, error } = await signUp.email(formData, {
         onRequest: (ctx) => {
           //show loading
         },
@@ -56,12 +54,11 @@ const Page = () => {
           //redirect to the dashboard or sign in page
         },
         onError: (ctx) => {
-          console.log('🚧 | handleSubmit | (ctx:', ctx);
           // display the error message
-          // alert(ctx.error.message);
+          alert(ctx.error.message);
+          router.push('/login');
         },
       });
-      console.log('🚧 | handleSubmit | data, error:', data, error);
     } catch (error) {
       setSubmitError('Failed to submit form');
     } finally {
@@ -71,11 +68,17 @@ const Page = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-6 rounded shadow-md w-full max-w-sm"
+      >
         <h2 className="text-2xl mb-4">Sign Up</h2>
         {submitError && <p className="text-red-500 mb-4">{submitError}</p>}
         <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-700"
+          >
             Email
           </label>
           <input
@@ -84,13 +87,19 @@ const Page = () => {
             id="email"
             value={formData.email}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.email ? 'border-red-500' : ''
-              }`}
+            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${
+              errors.email ? 'border-red-500' : ''
+            }`}
           />
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
         <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-700"
+          >
             Name
           </label>
           <input
@@ -99,13 +108,19 @@ const Page = () => {
             id="name"
             value={formData.name}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.name ? 'border-red-500' : ''
-              }`}
+            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${
+              errors.name ? 'border-red-500' : ''
+            }`}
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-700"
+          >
             Password
           </label>
           <input
@@ -114,10 +129,13 @@ const Page = () => {
             id="password"
             value={formData.password}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${errors.password ? 'border-red-500' : ''
-              }`}
+            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm ${
+              errors.password ? 'border-red-500' : ''
+            }`}
           />
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
         <button
           type="submit"
@@ -129,6 +147,6 @@ const Page = () => {
       </form>
     </div>
   );
-}
+};
 
-export default Page
+export default Page;

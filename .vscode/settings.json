@@ -12,5 +12,8 @@
   },
   "[json]": {
     "editor.defaultFormatter": "biomejs.biome"
+  },
+  "debug.javascript.defaultRuntimeExecutable": {
+    "pwa-node": "/Users/john/.local/share/mise/shims/node"
   }
 }
