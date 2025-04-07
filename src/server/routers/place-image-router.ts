@@ -33,13 +33,14 @@ export const placeImageRouter = j.router({
       );
     }
 
-    const key = `${input.catalogue}/${crypto.randomUUID()}`;
+    const id = crypto.randomUUID();
+    const key = `${input.catalogue}/${id}`;
     const blob = new Blob([input.file], { type: input.file.type });
     await R2.put(key, blob);
     const url = `https://${IMGIX_HOSTNAME}/${key}`;
 
     const placeImage = await db.insert(placeImages).values({
-      id: crypto.randomUUID(),
+      id,
       ...input,
       catalogue: input.catalogue,
       url,

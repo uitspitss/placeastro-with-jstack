@@ -8,7 +8,7 @@ export const RecentPost = () => {
   const [name, setName] = useState<string>('');
   const queryClient = useQueryClient();
 
-  const { data: placeImages, isPending: isLoadingPosts } = useQuery({
+  const { data: placeImages, isPending: isLoading } = useQuery({
     queryKey: ['get-recent-post'],
     queryFn: async () => {
       const res = await getClient().placeImages.list.$get();
@@ -29,7 +29,7 @@ export const RecentPost = () => {
 
   return (
     <div className="w-full max-w-sm backdrop-blur-lg bg-black/15 px-8 py-6 rounded-md text-zinc-100/75 space-y-2">
-      {isLoadingPosts ? (
+      {isLoading ? (
         <p className="text-[#ececf399] text-base/6">Loading posts...</p>
       ) : placeImages ? (
         <p className="text-[#ececf399] text-base/6">
