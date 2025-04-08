@@ -3,6 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { and, desc, eq } from 'drizzle-orm';
 import { env } from 'hono/adapter';
+import { HTTPException } from 'hono/http-exception';
 import { z } from 'zod';
 import { j, privateProcedure, publicProcedure } from '../jstack';
 import { getS3Client } from '../lib/s3';
@@ -34,11 +35,11 @@ export const placeImageRouter = j.router({
 
       const [catalogue, catalogueNumber] = input.key.split('/');
       if (!catalogue || !catalogueNumber) {
-        throw new Error('Invalid key');
+        throw new HTTPException(400, { message: 'Invalid key' });
       }
 
       if (catalogue !== 'M' && catalogue !== 'NGC') {
-        throw new Error('Invalid catalogue');
+        throw new HTTPException(400, { message: 'Invalid catalogue' });
       }
 
       const images = await db
@@ -51,7 +52,7 @@ export const placeImageRouter = j.router({
           ),
         );
       if (!images.length) {
-        throw new Error('Image not found');
+        throw new HTTPException(404, { message: 'Image not found' });
       }
 
       return c.superjson(images[0]);
