@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import PlaceImage from './components/place-image';
 
 export default async function Home() {
   return (
@@ -13,16 +14,10 @@ export default async function Home() {
             'from-white to-gray-50',
           )}
         >
-          <span>placeastro</span>
+          placeastro
         </h1>
-
-        <p className="text-[#ececf399] text-lg/7 md:text-xl/8 text-pretty sm:text-wrap sm:text-center text-center mb-8">
-          The stack for building seriously fast, lightweight and{' '}
-          <span className="inline sm:block">
-            end-to-end typesafe Next.js apps.
-          </span>
-        </p>
       </div>
+      <PlaceImage imageKey="M/4" className="w-36 h-36" />
     </main>
   );
 }

@@ -16,6 +16,11 @@ export const Providers = ({ children }: PropsWithChildren) => {
           onError: (err) => {
             if (err instanceof HTTPException) {
               // global error handling, e.g. toast notification ...
+              console.error('HTTP error:', err);
+            }
+            if (err instanceof Error) {
+              // global error handling, e.g. toast notification ...
+              console.error('Error:', err);
             }
           },
         }),
