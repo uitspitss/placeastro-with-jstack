@@ -7,17 +7,23 @@ import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { getClient } from '@/lib/client';
 import { createQueryKey } from '@/lib/query-key';
-import {
-  type CreatePlaceImageSchemaType,
-  createPlaceImageSchema,
-} from '@/server/schema/place-image-schema';
+import { createPlaceImageSchema } from '@/server/schema/place-image-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const schema = createPlaceImageSchema.merge(
+  z.object({
+    file: z.any().refine((file) => file.size > 0, 'The file is required.'),
+  }),
+);
+
+type SchemaType = z.infer<typeof schema>;
 
 export function PlaceImageUploadForm() {
   const form = useForm({
-    resolver: zodResolver(createPlaceImageSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       catalogue: 'M',
       catalogueNumber: '',
@@ -30,21 +36,46 @@ export function PlaceImageUploadForm() {
   const files = useUppyState(uppy, (state) => state.files);
   const mutation = useMutation({
     mutationKey: createQueryKey('placeImage').all(),
-    mutationFn: async (data: CreatePlaceImageSchemaType) => {
+    mutationFn: async (data: SchemaType) => {
       const key = `${data.catalogue}/${crypto.randomUUID()}`;
 
-      const res = await getClient().placeImages.getUploadUrl.$post({ key });
-      if (!res.ok) {
+      const resGetUrl = await getClient().placeImages.getUploadUrl.$post({
+        key,
+      });
+      if (!resGetUrl.ok) {
         throw new Error('Failed to upload file');
       }
-      const result = await res.json();
-      console.log('🚧 | mutationFn: | result:', result);
+      const resGetUrlData = await resGetUrl.json();
 
-      return result;
+      const resUpload = await fetch(resGetUrlData.uploadUrl, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': data.file.type,
+        },
+        body: data.file,
+      });
+      if (!resUpload.ok) {
+        throw new Error('Failed to upload file');
+      }
+
+      const resPlaceImage = await getClient().placeImages.create.$post({
+        ...data,
+        catalogue: data.catalogue,
+        catalogueNumber: data.catalogueNumber,
+        credits: data.credits,
+        sourceUrl: data.sourceUrl,
+        url: resGetUrlData.imgixUrl,
+      });
+      if (!resPlaceImage.ok) {
+        throw new Error('Failed to upload file');
+      }
+      const placeImage = await resPlaceImage.json();
+
+      return placeImage;
     },
   });
 
-  const onSubmit = async (data: CreatePlaceImageSchemaType) => {
+  const onSubmit = async (data: SchemaType) => {
     mutation.mutate(data, {
       onSuccess: () => {
         // form.reset();
