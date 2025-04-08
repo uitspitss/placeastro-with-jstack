@@ -3,6 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { desc } from 'drizzle-orm';
 import { env } from 'hono/adapter';
+import { z } from 'zod';
 import { j, privateProcedure, publicProcedure } from '../jstack';
 import { getS3Client } from '../lib/s3';
 import {
@@ -27,31 +28,14 @@ export const placeImageRouter = j.router({
   }),
 
   create: privateProcedure
-    .input(createPlaceImageSchema)
+    .input(createPlaceImageSchema.merge(z.object({ url: z.string().url() })))
     .post(async ({ ctx, c, input }) => {
       const { db } = ctx;
-      const { R2, IMGIX_HOSTNAME } = env(c);
-
-      if (input.catalogue !== 'M' && input.catalogue !== 'NGC') {
-        return c.superjson(
-          {
-            error: 'Invalid catalogue type.',
-          },
-          400,
-        );
-      }
-
-      const id = crypto.randomUUID();
-      const key = `${input.catalogue}/${id}`;
-      // const blob = new Blob([input.file], { type: input.file.type });
-      // await R2.put(key, blob);
-      const url = `https://${IMGIX_HOSTNAME}/${key}`;
 
       const placeImage = await db.insert(placeImages).values({
-        id,
+        id: crypto.randomUUID(),
         ...input,
         catalogue: input.catalogue,
-        url,
       });
 
       return c.superjson(placeImage);
@@ -61,10 +45,9 @@ export const placeImageRouter = j.router({
     .input(getUploadUrlSchema)
     .post(async ({ ctx, c, input }) => {
       const { IMGIX_HOSTNAME, R2_BUCKET, CLOUDFLARE_ACCOUNT_ID } = env(c);
-      console.log('🚧 | .post | CLOUDFLARE_ACCOUNT_ID:', CLOUDFLARE_ACCOUNT_ID);
 
       const s3 = getS3Client(c);
-      const url = await getSignedUrl(
+      const uploadUrl = await getSignedUrl(
         s3,
         new PutObjectCommand({ Bucket: R2_BUCKET, Key: input.key }),
         {
@@ -74,6 +57,6 @@ export const placeImageRouter = j.router({
 
       const imgixUrl = `https://${IMGIX_HOSTNAME}/${input.key}`;
 
-      return c.superjson({ url, imgixUrl });
+      return c.superjson({ uploadUrl, imgixUrl });
     }),
 });
