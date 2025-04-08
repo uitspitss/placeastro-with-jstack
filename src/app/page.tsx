@@ -18,11 +18,10 @@ export default async function Home() {
         </h1>
       </div>
       <Image
-        src="/M/3"
+        src="/M/1?w=400&h=400"
         alt="place image example"
-        className="w-36 h-36"
-        width={144}
-        height={144}
+        width={400}
+        height={400}
       />
     </main>
   );
