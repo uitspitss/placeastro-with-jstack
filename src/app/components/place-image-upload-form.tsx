@@ -6,22 +6,26 @@ import { useEffect, useState } from 'react';
 import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { getClient } from '@/lib/client';
-import { createQueryKey } from '@/lib/query-key';
+import { createMutationKey, createQueryKey } from '@/lib/query-key';
 import { createPlaceImageSchema } from '@/server/schema/place-image-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const schema = createPlaceImageSchema.merge(
   z.object({
-    file: z.any().refine((file) => file.size > 0, 'The file is required.'),
+    file: z
+      .instanceof(File)
+      .refine((file) => file.size > 0, 'The file is required.'),
   }),
 );
 
 type SchemaType = z.infer<typeof schema>;
 
 export function PlaceImageUploadForm() {
+  const queryClient = useQueryClient();
+
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -29,13 +33,13 @@ export function PlaceImageUploadForm() {
       catalogueNumber: '',
       credits: '',
       sourceUrl: '',
-      file: null,
+      file: undefined,
     },
   });
   const [uppy] = useState(() => new Uppy());
   const files = useUppyState(uppy, (state) => state.files);
   const mutation = useMutation({
-    mutationKey: createQueryKey('placeImage').all(),
+    mutationKey: createMutationKey('placeImage').add(),
     mutationFn: async (data: SchemaType) => {
       const key = `${data.catalogue}/${crypto.randomUUID()}`;
 
@@ -80,6 +84,9 @@ export function PlaceImageUploadForm() {
       onSuccess: () => {
         form.reset();
         uppy.clear();
+        queryClient.invalidateQueries({
+          queryKey: createQueryKey('placeImage').list(),
+        });
       },
       onError: (error) => {
         console.error('Upload failed:', error);

@@ -8,3 +8,9 @@ export const createQueryKey = (key: Key) => ({
   details: () => [...createQueryKey(key).all(), 'detail'] as const,
   detail: (id: unknown) => [...createQueryKey(key).details(), id] as const,
 });
+
+export const createMutationKey = (key: Key) => ({
+  add: () => [key, 'add'] as const,
+  update: (id: unknown) => [key, 'update', id] as const,
+  remove: (id: unknown) => [key, 'remove', id] as const,
+});

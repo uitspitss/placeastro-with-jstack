@@ -1,15 +1,17 @@
 'use client';
 
 import { getClient } from '@/lib/client';
+import { createQueryKey } from '@/lib/query-key';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
-const ImageListPage = () => {
+
+export const PlaceImageList = () => {
   const {
     data: placeImages,
     isPending: isPendingPlaceImages,
     error,
   } = useQuery({
-    queryKey: ['get-recent-post'],
+    queryKey: createQueryKey('placeImage').list(),
     queryFn: async () => {
       const res = await getClient().placeImages.list.$get();
       return await res.json();
@@ -36,8 +38,8 @@ const ImageListPage = () => {
             src={image.url}
             alt={image.credits}
             className="object-cover"
-            width={500}
-            height={500}
+            width={100}
+            height={100}
           />
           <div className="p-2">
             <p className="text-sm font-semibold">Credits: {image.credits}</p>
@@ -55,5 +57,3 @@ const ImageListPage = () => {
     </div>
   );
 };
-
-export default ImageListPage;
