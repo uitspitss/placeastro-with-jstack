@@ -8,6 +8,7 @@ export async function middleware(request: NextRequest) {
       cookie: request.headers.get('cookie') || '',
     },
   });
+  console.log('🚧 | middleware | session:', session);
   if (!session) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
