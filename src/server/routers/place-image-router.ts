@@ -1,7 +1,7 @@
 import { placeImages } from '@/server/db/schema';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { desc } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { env } from 'hono/adapter';
 import { z } from 'zod';
 import { j, privateProcedure, publicProcedure } from '../jstack';
@@ -26,6 +26,36 @@ export const placeImageRouter = j.router({
 
     return c.superjson(images);
   }),
+
+  getByKey: publicProcedure
+    .input(z.object({ key: z.string() }))
+    .query(async ({ c, ctx, input }) => {
+      const { db } = ctx;
+
+      const [catalogue, catalogueNumber] = input.key.split('/');
+      if (!catalogue || !catalogueNumber) {
+        throw new Error('Invalid key');
+      }
+
+      if (catalogue !== 'M' && catalogue !== 'NGC') {
+        throw new Error('Invalid catalogue');
+      }
+
+      const images = await db
+        .select()
+        .from(placeImages)
+        .where(
+          and(
+            eq(placeImages.catalogue, catalogue),
+            eq(placeImages.catalogueNumber, catalogueNumber),
+          ),
+        );
+      if (!images.length) {
+        throw new Error('Image not found');
+      }
+
+      return c.superjson(images[0]);
+    }),
 
   create: privateProcedure
     .input(createPlaceImageSchema.merge(z.object({ url: z.string().url() })))
