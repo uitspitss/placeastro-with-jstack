@@ -60,12 +60,12 @@ export const placeImageRouter = j.router({
   getUploadUrl: privateProcedure
     .input(getUploadUrlSchema)
     .post(async ({ ctx, c, input }) => {
-      const { IMGIX_HOSTNAME } = env(c);
+      const { IMGIX_HOSTNAME, R2_BUCKET } = env(c);
 
       const s3 = getS3Client(c);
       const url = await getSignedUrl(
         s3,
-        new PutObjectCommand({ Bucket: 'placeastro', Key: input.key }),
+        new PutObjectCommand({ Bucket: R2_BUCKET, Key: input.key }),
         {
           expiresIn: 60, // 1 min
         },
