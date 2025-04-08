@@ -2,6 +2,7 @@
 
 export interface Env {
 	IMGIX_HOSTNAME: "placeastro-r2.imgix.net";
+	R2_BUCKET: "placeastro";
 	CORS_ORIGIN: string;
 	BETTER_AUTH_URL: string;
 	BETTER_AUTH_SECRET: string;
