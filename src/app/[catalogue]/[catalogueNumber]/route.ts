@@ -1,14 +1,14 @@
 import { getClient } from '@/lib/client';
 
 type Params = {
-  params: {
+  params: Promise<{
     catalogue: string;
     catalogueNumber: number;
-  };
+  }>;
 };
 
 export async function GET(request: Request, { params }: Params) {
-  const { catalogue, catalogueNumber } = params;
+  const { catalogue, catalogueNumber } = await params;
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
   const w = searchParams.get('w');
   const h = searchParams.get('h');
