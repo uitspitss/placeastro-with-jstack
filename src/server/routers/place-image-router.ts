@@ -60,7 +60,8 @@ export const placeImageRouter = j.router({
   getUploadUrl: privateProcedure
     .input(getUploadUrlSchema)
     .post(async ({ ctx, c, input }) => {
-      const { IMGIX_HOSTNAME, R2_BUCKET } = env(c);
+      const { IMGIX_HOSTNAME, R2_BUCKET, CLOUDFLARE_ACCOUNT_ID } = env(c);
+      console.log('🚧 | .post | CLOUDFLARE_ACCOUNT_ID:', CLOUDFLARE_ACCOUNT_ID);
 
       const s3 = getS3Client(c);
       const url = await getSignedUrl(
