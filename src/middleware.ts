@@ -1,13 +1,13 @@
+import { betterFetch } from '@better-fetch/fetch';
 import { type NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/session`, {
-    headers: request.headers,
+  const { data: session } = await betterFetch('/api/auth/get-session', {
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+      cookie: request.headers.get('cookie') || '',
+    },
   });
-  if (!res.ok) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-  const session = await res.json();
   if (!session) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
