@@ -49,6 +49,14 @@ const api = j
   .on(['POST', 'GET'], '/auth/*', async (c) => {
     return c.get('auth').handler(c.req.raw);
   })
+  .get('/session', async (c) => {
+    const auth = c.get('auth');
+    const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+    if (!session) return c.json({ error: 'Unauthorized access' }, 401);
+
+    return c.json(session);
+  })
   .onError(j.defaults.errorHandler);
 
 /**
