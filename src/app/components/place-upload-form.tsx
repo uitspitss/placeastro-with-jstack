@@ -7,40 +7,48 @@ import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { getClient } from '@/lib/client';
 import { createQueryKey } from '@/lib/query-key';
-import { type SchemaType, schema } from '@/server/schema/place-image-schema';
+import {
+  type CreatePlaceImageSchemaType,
+  createPlaceImageSchema,
+} from '@/server/schema/place-image-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 
 export function PlaceImageUploadForm() {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(createPlaceImageSchema),
     defaultValues: {
       catalogue: 'M',
       catalogueNumber: '',
       credits: '',
       sourceUrl: '',
+      file: null,
     },
   });
   const [uppy] = useState(() => new Uppy());
   const files = useUppyState(uppy, (state) => state.files);
   const mutation = useMutation({
     mutationKey: createQueryKey('placeImage').all(),
-    mutationFn: async (data: SchemaType) => {
-      const res = await getClient().placeImages.create.$post(data);
+    mutationFn: async (data: CreatePlaceImageSchemaType) => {
+      const key = `${data.catalogue}/${crypto.randomUUID()}`;
+
+      const res = await getClient().placeImages.getUploadUrl.$post({ key });
       if (!res.ok) {
         throw new Error('Failed to upload file');
       }
+      const result = await res.json();
+      console.log('🚧 | mutationFn: | result:', result);
 
-      return res.json();
+      return result;
     },
   });
 
-  const onSubmit = async (data: SchemaType) => {
+  const onSubmit = async (data: CreatePlaceImageSchemaType) => {
     mutation.mutate(data, {
       onSuccess: () => {
-        form.reset();
-        uppy.clear();
+        // form.reset();
+        // uppy.clear();
       },
       onError: (error) => {
         console.error('Upload failed:', error);

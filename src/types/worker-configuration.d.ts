@@ -5,6 +5,8 @@ export interface Env {
 	CORS_ORIGIN: string;
 	BETTER_AUTH_URL: string;
 	BETTER_AUTH_SECRET: string;
+	R2_ACCESS_KEY_ID: string;
+	R2_SECRET_ACCESS_KEY: string;
 	R2: R2Bucket;
 	DB: D1Database;
 }

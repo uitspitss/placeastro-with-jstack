@@ -1,21 +1,20 @@
 import { z } from 'zod';
 
-export const schema = z.object({
+export const createPlaceImageSchema = z.object({
   catalogue: z.string().min(1),
   catalogueNumber: z.string().min(1),
   credits: z.string().min(1),
   sourceUrl: z.string().url(),
-  file: z.any(),
   // file: z
-  //   .instanceof(FileList)
-  //   .refine((files) => files.length > 0, 'The file is required.')
-  //   .transform<File>((files) => files.item(0) as File),
-  // .preprocess(
-  //   (value) => (Array.isArray(value) ? value : [value]),
-  //   z.array(z.instanceof(File)),
-  // )
-  // .refine((files) => files.length > 0, 'The file is required.')
-  // .transform<File>((files) => files[0] as File),
+  //   .instanceof(File)
+  //   .refine((file) => file.size > 0, 'The file is required.'),
+  file: z.any(),
 });
 
-export type SchemaType = z.infer<typeof schema>;
+export type CreatePlaceImageSchemaType = z.infer<typeof createPlaceImageSchema>;
+
+export const getUploadUrlSchema = z.object({
+  key: z.string().min(1),
+});
+
+export type GetUploadUrlSchemaType = z.infer<typeof getUploadUrlSchema>;

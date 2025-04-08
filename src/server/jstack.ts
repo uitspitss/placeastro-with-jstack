@@ -40,7 +40,7 @@ type AuthMiddlewareOutput = InferMiddlewareOutput<typeof authMiddleware>;
  */
 export const publicProcedure = j.procedure.use(databaseMiddleware);
 
-/*
+/**
  * Private (authenticated) procedures
  */
 export const privateProcedure = publicProcedure.use(authMiddleware);
