@@ -78,8 +78,8 @@ export function PlaceImageUploadForm() {
   const onSubmit = async (data: SchemaType) => {
     mutation.mutate(data, {
       onSuccess: () => {
-        // form.reset();
-        // uppy.clear();
+        form.reset();
+        uppy.clear();
       },
       onError: (error) => {
         console.error('Upload failed:', error);
