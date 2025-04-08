@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import PlaceImage from './components/place-image';
+import Image from 'next/image';
 
 export default async function Home() {
   return (
@@ -17,7 +17,13 @@ export default async function Home() {
           placeastro
         </h1>
       </div>
-      <PlaceImage imageKey="M/4" className="w-36 h-36" />
+      <Image
+        src="/M/3"
+        alt="place image example"
+        className="w-36 h-36"
+        width={144}
+        height={144}
+      />
     </main>
   );
 }
