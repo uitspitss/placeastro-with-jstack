@@ -47,6 +47,8 @@ export default async function Home() {
         alt="place image example"
         width={400}
         height={400}
+        placeholder="blur"
+        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkAAIAAAoAAv/lPAAAAABJRU5ErkJggg=="
       />
     </main>
   );
