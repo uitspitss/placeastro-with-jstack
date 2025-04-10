@@ -10,8 +10,8 @@ type Params = {
 export async function GET(request: Request, { params }: Params) {
   const { catalogue, catalogueNumber } = await params;
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
-  const w = searchParams.get('w');
-  const h = searchParams.get('h');
+  const w = searchParams.get('w') || '400';
+  const h = searchParams.get('h') || '400';
 
   const upperCasedCatalogue = catalogue.toUpperCase();
   const catalogues = ['M', 'NGC'];
@@ -43,12 +43,8 @@ export async function GET(request: Request, { params }: Params) {
   // size
   imgixParams.append('fit', 'fillmax');
   imgixParams.append('fill', 'blur');
-  if (w && Number(w) > 0) {
-    imgixParams.append('w', w);
-  }
-  if (h && Number(h) > 0) {
-    imgixParams.append('h', h);
-  }
+  imgixParams.append('w', w);
+  imgixParams.append('h', h);
 
   // fetching image to imgix
   const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
