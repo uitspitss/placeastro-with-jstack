@@ -1,5 +1,6 @@
 'use client';
 
+import { ThemeProvider } from '@/components/theme-provider';
 import {
   QueryCache,
   QueryClient,
@@ -28,6 +29,14 @@ export const Providers = ({ children }: PropsWithChildren) => {
   );
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="dark"
+        disableTransitionOnChange
+      >
+        {children}
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 };

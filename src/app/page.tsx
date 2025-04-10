@@ -26,7 +26,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="bg-background min-h-screen flex items-center justify-center">
+    <main className="bg-background min-h-screen flex items-center justify-center">
       <div className="container px-6 flex flex-col lg:flex-row items-center justify-center gap-16">
         <div className="flex flex-col gap-8 max-w-[584px]">
           <div className="flex flex-col gap-5 md:gap-4 items-center">
@@ -70,6 +70,6 @@ export default function Landing() {
         </div>
         <Gallery imageUrls={galleryUrls} />
       </div>
-    </div>
+    </main>
   );
 }
