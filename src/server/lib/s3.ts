@@ -1,7 +1,10 @@
 import { S3Client } from '@aws-sdk/client-s3';
-import type { ServerContext } from '../jstack';
+import { getContext } from 'hono/context-storage';
+import type { ServerEnv } from '../jstack';
 
-export const getS3Client = (c: ServerContext) => {
+export const getS3Client = () => {
+  const c = getContext<ServerEnv>();
+
   return new S3Client({
     region: 'auto',
     endpoint: `https://${c.env.CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,

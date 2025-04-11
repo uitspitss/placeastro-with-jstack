@@ -43,7 +43,7 @@ const api = j
     return corsMiddleware(c, next);
   })
   .use('*', async (c: ServerContext, next) => {
-    const auth = createAuth(c);
+    const auth = createAuth();
     c.set('auth', auth);
 
     return await next();
