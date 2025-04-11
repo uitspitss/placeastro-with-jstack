@@ -30,8 +30,7 @@ export function Gallery({ imageUrls }: Props) {
       <CarouselContent>
         {imageUrls.map((imageUrl) => (
           <CarouselItem key={imageUrl} className="relative">
-            {/* <div className="p-1 relative"> */}
-            <AspectRatio ratio={1 / 1} className="w-full rounded-xl border">
+            <AspectRatio ratio={1 / 1}>
               <Image
                 src={imageUrl}
                 alt="placeholder image"
@@ -39,7 +38,6 @@ export function Gallery({ imageUrls }: Props) {
                 objectFit="cover"
               />
             </AspectRatio>
-            {/* </div> */}
           </CarouselItem>
         ))}
       </CarouselContent>
