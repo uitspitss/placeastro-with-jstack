@@ -67,6 +67,15 @@ export default function Landing() {
               </div>
             ))}
           </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-2xl font-bold leading-8 text-foreground">
+              ✅ Done
+            </h2>
+            <p className="text-base font-normal leading-6 text-foreground">
+              ・Messier (M1~5, M7~17, M19~20, M22, M27~28, M30~33, M42~45, M49,
+              M51, M53~M72, M74~M92, M98~M102, M104~110)
+            </p>
+          </div>
         </div>
         <Gallery imageUrls={galleryUrls} />
       </div>
