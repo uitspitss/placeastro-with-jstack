@@ -1,5 +1,5 @@
 import { env } from 'hono/adapter';
-import { cache } from 'hono/cache';
+import { contextStorage } from 'hono/context-storage';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 import { type ServerContext, j } from './jstack';
@@ -16,6 +16,7 @@ const api = j
   .router()
   .basePath('/api')
   .use(logger())
+  .use(contextStorage())
   .use('/auth/*', async (c: ServerContext, next) => {
     const { CORS_ORIGIN } = env(c);
 
@@ -47,7 +48,6 @@ const api = j
 
     return await next();
   })
-  .get('*', cache({ cacheName: 'placeastro', cacheControl: 'max-age=3600' }))
   .on(['POST', 'GET'], '/auth/*', async (c) => {
     return c.get('auth').handler(c.req.raw);
   })
