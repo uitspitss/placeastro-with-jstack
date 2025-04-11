@@ -57,7 +57,7 @@ export default function Landing() {
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-bold leading-8 text-foreground">
-              ✅ Done
+              ✅ Added
             </h2>
             <p className="text-base font-normal leading-6 text-foreground">
               ・Messier (M1~5, M7~17, M19~20, M22, M27~28, M30~33, M42~45, M49,
