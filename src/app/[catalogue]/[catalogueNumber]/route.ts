@@ -1,4 +1,5 @@
 import { getClient } from '@/lib/client';
+import { ResultAsync } from 'neverthrow';
 
 type Params = {
   params: Promise<{
@@ -19,9 +20,17 @@ export async function GET(request: Request, { params }: Params) {
     return new Response('Not found catalogue', { status: 404 });
   }
 
-  const res = await getClient().placeImages.getByKey.$get({
-    key: `${upperCasedCatalogue}/${catalogueNumber}`,
-  });
+  const response = await ResultAsync.fromThrowable(() =>
+    getClient().placeImages.getByKey.$get({
+      key: `${upperCasedCatalogue}/${catalogueNumber}`,
+    }),
+  )();
+
+  if (response.isErr()) {
+    return new Response('Not found image', { status: 404 });
+  }
+
+  const res = await response.unwrapOr({ ok: false } as Response);
   if (!res.ok) {
     return new Response('Not found image', { status: 404 });
   }
