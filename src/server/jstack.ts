@@ -1,13 +1,15 @@
-import type { Env } from '@/types/worker-configuration';
+import type { Env as EnvValue } from '@/types/worker-configuration';
 import { drizzle } from 'drizzle-orm/d1';
 import type { Context } from 'hono';
 import { env } from 'hono/adapter';
+import { contextStorage } from 'hono/context-storage';
 import { type InferMiddlewareOutput, jstack } from 'jstack';
 import { createAuth } from './lib/auth';
 
-export type ServerContext = Context<{ Bindings: Env }>;
+export type ServerEnv = { Bindings: EnvValue };
+export type ServerContext = Context<ServerEnv>;
 
-export const j = jstack.init<{ Bindings: Env }>();
+export const j = jstack.init<ServerEnv>();
 
 /**
  * Type-safely injects database into all procedures
@@ -27,11 +29,13 @@ type DatabaseMiddlewareOutput = InferMiddlewareOutput<
 >;
 
 const authMiddleware = j.middleware(async ({ c, ctx, next }) => {
-  const auth = createAuth(c);
+  const auth = createAuth();
 
   return await next({ auth });
 });
 type AuthMiddlewareOutput = InferMiddlewareOutput<typeof authMiddleware>;
+
+const contextStorageMiddleware = j.fromHono(contextStorage());
 
 /**
  * Public (unauthenticated) procedures

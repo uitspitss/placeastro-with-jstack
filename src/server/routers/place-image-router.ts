@@ -77,7 +77,7 @@ export const placeImageRouter = j.router({
     .post(async ({ ctx, c, input }) => {
       const { IMGIX_HOSTNAME, R2_BUCKET } = env(c);
 
-      const s3 = getS3Client(c);
+      const s3 = getS3Client();
       const uploadUrl = await getSignedUrl(
         s3,
         new PutObjectCommand({ Bucket: R2_BUCKET, Key: input.key }),
