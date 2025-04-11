@@ -1,10 +1,4 @@
 'use client';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@radix-ui/react-tooltip';
 import { Clipboard } from 'lucide-react';
 import { useState } from 'react';
 import { Gallery } from './components/gallery';
@@ -45,25 +39,19 @@ export default function Landing() {
                 className="flex items-center justify-between bg-muted text-foreground rounded px-2 py-1 w-full gap-8"
               >
                 <code className="font-bold text-sm">{snippet}</code>
-                <TooltipProvider>
-                  <Tooltip open={copied === index} delayDuration={0}>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        className="cursor-pointer"
-                        onClick={() => handleCopy(snippet, index)}
-                      >
-                        <Clipboard className="h-4 w-4" />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent
-                      className="bg-muted p-1 rounded border"
-                      sideOffset={3}
-                    >
-                      <p>copied!</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <button
+                  type="button"
+                  className="cursor-pointer"
+                  onClick={() => handleCopy(snippet, index)}
+                >
+                  {index === copied ? (
+                    <p className="leading-0 text-sm text-accent-foreground animate-in fade-in">
+                      Copied!
+                    </p>
+                  ) : (
+                    <Clipboard className="h-4 w-4 animate-in fade-in" />
+                  )}
+                </button>
               </div>
             ))}
           </div>
