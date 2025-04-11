@@ -10,6 +10,7 @@ export default function Landing() {
     'https://placeastro.u7s.dev/m/16',
     'https://placeastro.u7s.dev/m/42?w=720',
     'https://placeastro.u7s.dev/random?w=600&h=480',
+    'https://placeastro.u7s.dev/m/74/info',
   ];
   const galleryUrls = ['/M/1', '/M/2', '/M/3'];
 
