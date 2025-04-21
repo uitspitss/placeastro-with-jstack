@@ -21,7 +21,7 @@ export async function GET(request: Request) {
 
   // creating imgix params
   const imgixParams = new URLSearchParams();
-  const credits = btoa(`credits: ${placeImage.credits}`);
+  const credits = btoa(`credit: ${placeImage.credits}`);
   imgixParams.append('txt64', credits);
 
   // text
