@@ -1,6 +1,6 @@
 import { getClient } from '@/lib/client';
 
-export async function GET(request: Request) {
+export async function GET(request: Request, response: Response) {
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
   const w = searchParams.get('w') || '400';
   const h = searchParams.get('h') || '400';
@@ -38,11 +38,18 @@ export async function GET(request: Request) {
   // fetching image to imgix
   const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
   const contentType = res.headers.get('Content-Type');
+
   if (!contentType) {
-    return new Response('Not found content type', { status: 404 });
+    return new Response('Not found content type', {
+      status: 404,
+      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-cache' },
+    });
   }
 
   return new Response(await resImage.arrayBuffer(), {
-    headers: { 'Content-Type': contentType },
+    headers: {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
+    },
   });
 }
