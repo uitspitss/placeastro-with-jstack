@@ -1,6 +1,6 @@
 import { getClient } from '@/lib/client';
 
-export async function GET(request: Request, response: Response) {
+export async function GET(request: Request) {
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
   const w = searchParams.get('w') || '400';
   const h = searchParams.get('h') || '400';
