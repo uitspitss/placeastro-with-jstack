@@ -41,7 +41,7 @@ export async function GET(request: Request, { params }: Params) {
 
   // creating imgix params
   const imgixParams = new URLSearchParams();
-  const credits = btoa(`credits: ${placeImage.credits}`);
+  const credits = btoa(`credit: ${placeImage.credits}`);
   imgixParams.append('txt64', credits);
 
   // text
@@ -63,6 +63,9 @@ export async function GET(request: Request, { params }: Params) {
   }
 
   return new Response(await resImage.arrayBuffer(), {
-    headers: { 'Content-Type': contentType },
+    headers: {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
+    },
   });
 }

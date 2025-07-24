@@ -36,10 +36,15 @@ export async function GET(request: Request, { params }: Params) {
     return new Response('Not found image', { status: 404 });
   }
   const info = {
-    credits: placeImage.credits,
+    credit: placeImage.credits,
     sourceUrl: placeImage.sourceUrl,
     name: `${placeImage.catalogue}${placeImage.catalogueNumber}`,
   };
 
-  return new Response(JSON.stringify(info));
+  return new Response(JSON.stringify(info), {
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30',
+    },
+  });
 }
