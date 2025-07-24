@@ -21,8 +21,21 @@ export default function Landing() {
   };
 
   return (
-    <main className="bg-background min-h-screen flex items-center justify-center">
-      <div className="container px-6 flex flex-col lg:flex-row items-center justify-center gap-16">
+    <main className="min-h-screen w-full bg-black relative flex items-center justify-center">
+      {/* Dark White Dotted Grid Background */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          background: '#000000',
+          backgroundImage: `
+        radial-gradient(circle, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px)
+      `,
+          backgroundSize: '30px 30px',
+          backgroundPosition: '0 0',
+        }}
+      />
+      {/* Your Content/Components */}
+      <div className="container px-6 flex flex-col lg:flex-row items-center justify-center gap-16 z-10">
         <div className="flex flex-col gap-8 max-w-[584px]">
           <div className="flex flex-col gap-5 md:gap-4 items-center">
             <h1 className="text-foreground text-5xl font-bold leading-[48px]">
