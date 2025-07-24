@@ -42,14 +42,13 @@ export async function GET(request: Request) {
   if (!contentType) {
     return new Response('Not found content type', {
       status: 404,
-      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-cache' },
     });
   }
 
   return new Response(await resImage.arrayBuffer(), {
     headers: {
       'Content-Type': contentType,
-      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
+      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30',
     },
   });
 }
