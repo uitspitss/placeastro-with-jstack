@@ -38,11 +38,18 @@ export async function GET(request: Request) {
   // fetching image to imgix
   const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
   const contentType = res.headers.get('Content-Type');
+
   if (!contentType) {
-    return new Response('Not found content type', { status: 404 });
+    return new Response('Not found content type', {
+      status: 404,
+      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-cache' },
+    });
   }
 
   return new Response(await resImage.arrayBuffer(), {
-    headers: { 'Content-Type': contentType },
+    headers: {
+      'Content-Type': contentType,
+      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
+    },
   });
 }
