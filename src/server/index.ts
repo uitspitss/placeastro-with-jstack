@@ -14,9 +14,21 @@ import { placeImageRouter } from './routers/place-image-router';
  */
 const api = j
   .router()
-  .basePath('/api')
+  .use(async (c: ServerContext, next) => {
+    const { CORS_ORIGIN } = env(c);
+
+    const corsMiddleware = cors({
+      origin: CORS_ORIGIN,
+      allowHeaders: ['x-is-superjson', 'Content-Type', 'Authorization'],
+      allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT'],
+      exposeHeaders: ['x-is-superjson'],
+      credentials: true,
+    });
+    return corsMiddleware(c, next);
+  })
   .use(logger())
   .use(contextStorage())
+  .basePath('/api')
   .use('/auth/*', async (c: ServerContext, next) => {
     const { CORS_ORIGIN } = env(c);
 
