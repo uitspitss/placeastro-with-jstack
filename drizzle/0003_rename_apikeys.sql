@@ -1,0 +1,1 @@
+ALTER TABLE `apiKeys` RENAME TO `apikeys`;
