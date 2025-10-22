@@ -42,7 +42,7 @@
     "drizzle-orm": "^0.39.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
-    "hono": "^4.7.0",
+    "hono": "^4.10.2",
     "jstack": "^1.0.6",
     "lucide-react": "^0.487.0",
     "neverthrow": "^8.2.0",
