@@ -1,12 +1,14 @@
 import type { AppRouter } from '@placeastro/api';
-import { createClient } from 'jstack';
+import { createORPCClient } from '@orpc/client';
+import { RPCLink } from '@orpc/client/fetch';
+import type { RouterClient } from '@orpc/server';
 
-/**
- * Your type-safe API client
- * @see https://jstack.app/docs/backend/api-client
- */
+const link = new RPCLink({
+  url: import.meta.env.VITE_API_URL
+    ? `${import.meta.env.VITE_API_URL}/api/rpc`
+    : '/api/rpc',
+  fetch: (input, init) =>
+    globalThis.fetch(input, { ...init, credentials: 'include' }),
+});
 
-export const getClient = () =>
-  createClient<AppRouter>({
-    baseUrl: `${process.env.NEXT_PUBLIC_API_URL}/api`,
-  });
+export const client: RouterClient<AppRouter> = createORPCClient(link);

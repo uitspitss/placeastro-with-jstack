@@ -1,9 +1,6 @@
-'use client';
-
-import { getClient } from '@/lib/client';
+import { client } from '@/lib/client';
 import { createQueryKey } from '@/lib/query-key';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 
 export const PlaceImageList = () => {
   const {
@@ -12,10 +9,7 @@ export const PlaceImageList = () => {
     error,
   } = useQuery({
     queryKey: createQueryKey('placeImage').list(),
-    queryFn: async () => {
-      const res = await getClient().placeImages.list.$get();
-      return await res.json();
-    },
+    queryFn: () => client.placeImages.list(),
   });
 
   if (isPendingPlaceImages) {
@@ -34,12 +28,10 @@ export const PlaceImageList = () => {
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
       {placeImages.map((image) => (
         <div key={image.id} className="border rounded-lg overflow-hidden">
-          <Image
+          <img
             src={image.url}
             alt={image.credits}
-            className="object-cover"
-            width={100}
-            height={100}
+            className="object-cover w-full h-auto"
           />
           <div className="p-2">
             <p className="text-sm font-semibold">Credits: {image.credits}</p>
