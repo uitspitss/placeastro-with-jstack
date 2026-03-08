@@ -1,0 +1,22 @@
+# Cloudflare Workers local development variables
+# Copy this file to .dev.vars and update the values
+
+# Authentication
+BETTER_AUTH_SECRET=your-secret-here
+BETTER_AUTH_URL=http://localhost:3000
+
+# CORS
+CORS_ORIGIN=http://localhost:3000
+
+# R2 Storage (for local dev, use Miniflare)
+R2_ACCESS_KEY_ID=your-r2-access-key
+R2_SECRET_ACCESS_KEY=your-r2-secret-key
+R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
+R2_BUCKET=placeastro-dev
+
+# Imgix CDN
+IMGIX_HOSTNAME=your-imgix-hostname.imgix.net
+IMGIX_SECURE_URL_TOKEN=your-imgix-token
+
+# Database (D1 will be handled by wrangler)
+# DB binding is automatically created
