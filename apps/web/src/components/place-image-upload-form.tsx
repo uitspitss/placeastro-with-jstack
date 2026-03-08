@@ -7,7 +7,7 @@ import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { getClient } from '@/lib/client';
 import { createMutationKey, createQueryKey } from '@/lib/query-key';
-import { createPlaceImageSchema } from '@/server/schema/place-image-schema';
+import { createPlaceImageSchema } from '@placeastro/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';

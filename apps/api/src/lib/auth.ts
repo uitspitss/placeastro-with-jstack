@@ -1,4 +1,4 @@
-import * as schema from '@/server/db/auth-schema';
+import * as schema from '@placeastro/database/auth-schema';
 import { type BetterAuthOptions, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { drizzle } from 'drizzle-orm/d1';

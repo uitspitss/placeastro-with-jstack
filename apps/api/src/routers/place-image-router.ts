@@ -1,4 +1,4 @@
-import { placeImages } from '@/server/db/schema';
+import { placeImages } from '@placeastro/database';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { and, desc, eq } from 'drizzle-orm';
@@ -10,7 +10,7 @@ import { getS3Client } from '../lib/s3';
 import {
   createPlaceImageSchema,
   getUploadUrlSchema,
-} from '../schema/place-image-schema';
+} from '@placeastro/shared';
 
 export const placeImageRouter = j.router({
   health: publicProcedure.query(async ({ c }) => {

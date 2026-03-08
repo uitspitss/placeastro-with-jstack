@@ -12,7 +12,9 @@
     }
   ],
   "dev": {
-    "port": 8080
+    "port": 8080,
+    "local_protocol": "http",
+    "upstream_protocol": "https"
   },
   "vars": {
     "CORS_ORIGIN": "https://placeastro.u7s.dev",

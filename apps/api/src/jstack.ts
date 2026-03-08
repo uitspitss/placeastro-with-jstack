@@ -1,4 +1,5 @@
-import type { Env as EnvValue } from '@/types/worker-configuration';
+/// <reference path="./types/worker-configuration.d.ts" />
+type EnvValue = Cloudflare.Env;
 import { drizzle } from 'drizzle-orm/d1';
 import type { Context } from 'hono';
 import { env } from 'hono/adapter';
@@ -6,7 +7,12 @@ import { contextStorage } from 'hono/context-storage';
 import { type InferMiddlewareOutput, jstack } from 'jstack';
 import { createAuth } from './lib/auth';
 
-export type ServerEnv = { Bindings: EnvValue };
+export type ServerEnv = {
+  Bindings: EnvValue;
+  Variables: {
+    auth: ReturnType<typeof createAuth>;
+  };
+};
 export type ServerContext = Context<ServerEnv>;
 
 export const j = jstack.init<ServerEnv>();

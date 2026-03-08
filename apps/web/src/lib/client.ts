@@ -1,4 +1,4 @@
-import type { AppRouter } from '@/server';
+import type { AppRouter } from '@placeastro/api';
 import { createClient } from 'jstack';
 
 /**

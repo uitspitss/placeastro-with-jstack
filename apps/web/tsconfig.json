@@ -20,7 +20,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@placeastro/api": ["../api/src/client-types.ts"]
     },
     "target": "ES2017"
   },
