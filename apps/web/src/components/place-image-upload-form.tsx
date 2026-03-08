@@ -1,11 +1,9 @@
-'use client';
-
 import Uppy from '@uppy/core';
 import { Dashboard, useUppyState } from '@uppy/react';
 import { useEffect, useState } from 'react';
 import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
-import { getClient } from '@/lib/client';
+import { client } from '@/lib/client';
 import { createMutationKey, createQueryKey } from '@/lib/query-key';
 import { createPlaceImageSchema } from '@placeastro/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -43,15 +41,10 @@ export function PlaceImageUploadForm() {
     mutationFn: async (data: SchemaType) => {
       const key = `${data.catalogue}/${crypto.randomUUID()}`;
 
-      const resGetUrl = await getClient().placeImages.getUploadUrl.$post({
-        key,
-      });
-      if (!resGetUrl.ok) {
-        throw new Error('Failed to upload file');
-      }
-      const resGetUrlData = await resGetUrl.json();
+      const { uploadUrl, imgixUrl } =
+        await client.placeImages.getUploadUrl({ key });
 
-      const resUpload = await fetch(resGetUrlData.uploadUrl, {
+      const resUpload = await fetch(uploadUrl, {
         method: 'PUT',
         headers: {
           'Content-Type': data.file.type,
@@ -62,18 +55,13 @@ export function PlaceImageUploadForm() {
         throw new Error('Failed to upload file');
       }
 
-      const resPlaceImage = await getClient().placeImages.create.$post({
-        ...data,
+      const placeImage = await client.placeImages.create({
         catalogue: data.catalogue,
         catalogueNumber: data.catalogueNumber,
         credits: data.credits,
         sourceUrl: data.sourceUrl,
-        url: resGetUrlData.imgixUrl,
+        url: imgixUrl,
       });
-      if (!resPlaceImage.ok) {
-        throw new Error('Failed to upload file');
-      }
-      const placeImage = await resPlaceImage.json();
 
       return placeImage;
     },

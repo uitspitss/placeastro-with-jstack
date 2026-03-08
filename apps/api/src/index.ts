@@ -1,78 +1,68 @@
-import { env } from 'hono/adapter';
-import { contextStorage } from 'hono/context-storage';
+import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
-import { type ServerContext, j } from './jstack';
+import { contextStorage } from 'hono/context-storage';
+import { RPCHandler } from '@orpc/server/fetch';
+import { onError } from '@orpc/server';
 import { createAuth } from './lib/auth';
 import { placeImageRouter } from './routers/place-image-router';
+import { imageRoutes } from './routes/image-routes';
+import type { HonoEnv } from './orpc';
 
-/**
- * This is your base API.
- * Here, you can handle errors, not-found responses, cors and more.
- *
- * @see https://jstack.app/docs/backend/app-router
- */
-const api = j
-  .router()
-  .use(async (c: ServerContext, next) => {
-    const { CORS_ORIGIN } = env(c);
-
-    const corsMiddleware = cors({
-      origin: CORS_ORIGIN,
-      allowHeaders: ['x-is-superjson', 'Content-Type', 'Authorization'],
-      allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT'],
-      exposeHeaders: ['x-is-superjson'],
-      credentials: true,
-    });
-    return corsMiddleware(c, next);
-  })
-  .use(logger())
-  .use(contextStorage())
-  .basePath('/api')
-  .use('/auth/*', async (c: ServerContext, next) => {
-    const { CORS_ORIGIN } = env(c);
-
-    const corsMiddleware = cors({
-      origin: `${CORS_ORIGIN}`,
-      allowHeaders: ['Content-Type', 'Authorization'],
-      allowMethods: ['POST', 'GET', 'OPTIONS'],
-      exposeHeaders: ['Content-Length'],
-      maxAge: 600,
-      credentials: true,
-    });
-    return corsMiddleware(c, next);
-  })
-  .use('*', async (c: ServerContext, next) => {
-    const { CORS_ORIGIN } = env(c);
-
-    const corsMiddleware = cors({
-      origin: `${CORS_ORIGIN}`,
-      allowHeaders: ['x-is-superjson', 'Content-Type'],
-      allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT'],
-      exposeHeaders: ['x-is-superjson'],
-      credentials: true,
-    });
-    return corsMiddleware(c, next);
-  })
-  .use('*', async (c: ServerContext, next) => {
-    const auth = createAuth();
-    c.set('auth', auth);
-
-    return await next();
-  })
-  .on(['POST', 'GET'], '/auth/*', async (c) => {
-    return c.get('auth').handler(c.req.raw);
-  })
-  .onError(j.defaults.errorHandler);
-
-/**
- * This is the main router for your server.
- * All routers in /server/routers should be added here manually.
- */
-const appRouter = j.mergeRouters(api, {
+export const appRouter = {
   placeImages: placeImageRouter,
-});
+};
 
 export type AppRouter = typeof appRouter;
 
-export default appRouter;
+const rpcHandler = new RPCHandler(appRouter, {
+  interceptors: [
+    onError((error) => {
+      console.error('[oRPC error]', error);
+    }),
+  ],
+});
+
+const app = new Hono<HonoEnv>();
+
+app.use('*', logger());
+app.use('*', contextStorage());
+
+app.use('/api/*', async (c, next) => {
+  return cors({
+    origin: c.env.CORS_ORIGIN,
+    allowHeaders: ['Content-Type', 'Authorization'],
+    allowMethods: ['POST', 'GET', 'OPTIONS', 'PUT'],
+    exposeHeaders: ['Content-Length'],
+    credentials: true,
+  })(c, next);
+});
+
+app.use('/api/*', async (c, next) => {
+  c.set('auth', createAuth());
+  return next();
+});
+
+app.on(['POST', 'GET'], '/api/auth/*', (c) => {
+  return c.get('auth').handler(c.req.raw);
+});
+
+app.use('/api/rpc/*', async (c, next) => {
+  const { matched, response } = await rpcHandler.handle(c.req.raw, {
+    prefix: '/api/rpc',
+    context: {
+      env: c.env,
+      request: c.req.raw,
+    },
+  });
+
+  if (matched) {
+    return c.newResponse(response.body, response);
+  }
+
+  await next();
+});
+
+app.route('/', imageRoutes);
+
+export default app;

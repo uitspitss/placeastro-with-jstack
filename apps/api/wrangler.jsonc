@@ -4,7 +4,7 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "main": "src/server/index.ts",
+  "main": "src/index.ts",
   "routes": [
     {
       "pattern": "placeastro-api.u7s.dev",
