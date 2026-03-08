@@ -1,0 +1,30 @@
+{
+  "name": "@placeastro/database",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "generate": "cross-env LOCAL_DB_PATH=$(find ../../apps/api/.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit generate",
+    "migrate": "wrangler d1 execute placeastro --local --config=../../apps/api/wrangler.jsonc",
+    "migrate:prod": "cross-env NODE_ENV=production drizzle-kit migrate",
+    "push": "drizzle-kit push",
+    "studio": "cross-env LOCAL_DB_PATH=$(find ../../apps/api/.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
+    "studio:prod": "cross-env NODE_ENV=production drizzle-kit studio",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf node_modules"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.39.0",
+    "postgres": "^3.4.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "better-sqlite3": "^11.8.1",
+    "cross-env": "^7.0.3",
+    "drizzle-kit": "^0.30.4",
+    "dotenv": "^16.4.5",
+    "typescript": "^5"
+  }
+}

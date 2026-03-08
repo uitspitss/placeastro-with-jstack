@@ -1,0 +1,1 @@
+export * from './schema/place-image-schema'
