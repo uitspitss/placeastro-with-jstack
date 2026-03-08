@@ -1,8 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
+node_modules
+.pnp
 .pnp.js
 .yarn/install-state.gz
 
@@ -10,12 +10,12 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
-/dist
+build/
+dist/
 
 # misc
 .DS_Store
@@ -38,8 +38,28 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# wrangler
-.wrangler
+# Cloudflare
+.wrangler/
+.miniflare/
+worker-configuration.d.ts
 
 # open-next
 .open-next
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+.drizzle/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
