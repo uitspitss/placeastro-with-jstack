@@ -1,5 +1,5 @@
-import { PlaceImageList } from '../components/place-image-list';
-import { PlaceImageUploadForm } from '../components/place-image-upload-form';
+import { PlaceImageList } from '@/components/place-image-list';
+import { PlaceImageUploadForm } from '@/components/place-image-upload-form';
 
 const UploadPage = () => {
   return (

@@ -1,9 +1,9 @@
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@placeastro/ui';
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel';
+} from '@placeastro/ui';
 import Autoplay from 'embla-carousel-autoplay';
 import Image from 'next/image';
 import * as React from 'react';

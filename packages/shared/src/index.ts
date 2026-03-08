@@ -1,1 +1,1 @@
-export * from './schema/place-image-schema'
+export * from './place-image-schema'

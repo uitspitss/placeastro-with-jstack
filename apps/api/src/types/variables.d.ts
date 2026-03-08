@@ -1,4 +1,4 @@
-import type { Auth } from '@/server/lib/auth';
+import type { Auth } from '../lib/auth';
 
 declare module 'hono' {
   interface ContextVariableMap {

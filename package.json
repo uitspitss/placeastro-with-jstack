@@ -2,20 +2,33 @@
   "name": "placeastro-monorepo",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.7.0",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "build": "pnpm run --recursive build",
+    "dev": "turbo dev",
+    "dev:stream": "turbo dev --ui=stream",
+    "dev:api": "pnpm --filter @placeastro/api dev",
+    "dev:web": "pnpm --filter @placeastro/web dev",
+    "build": "turbo build",
+    "build:api": "pnpm --filter @placeastro/api build",
+    "build:web": "pnpm --filter @placeastro/web build",
+    "deploy:api": "pnpm --filter @placeastro/api deploy",
     "lint": "biome lint .",
     "format": "biome format .",
     "check": "biome check .",
-    "clean": "pnpm run --recursive clean",
-    "typecheck": "pnpm run --recursive typecheck"
+    "clean": "pnpm run --recursive clean && rm -rf .turbo",
+    "clean:all": "pnpm clean && rm -rf node_modules pnpm-lock.yaml",
+    "typecheck": "turbo typecheck",
+    "types:generate": "pnpm --filter @placeastro/api wrangler:types",
+    "db:generate": "pnpm --filter @placeastro/database generate",
+    "db:migrate": "pnpm --filter @placeastro/database migrate",
+    "db:studio": "pnpm --filter @placeastro/database studio",
+    "db:init:local": "cd apps/api && npx wrangler d1 execute DB --local --file=../../packages/database/drizzle/0000_init.sql && npx wrangler d1 execute DB --local --file=../../packages/database/drizzle/0001_auth.sql",
+    "setup": "pnpm install && pnpm types:generate && pnpm db:init:local"
   },
-  "dependencies": {},
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@cloudflare/workers-types": "^4.20240815.0",
@@ -30,10 +43,8 @@
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5"
-  },
-  "volta": {
-    "node": "22.14.0",
-    "pnpm": "10.5.2"
+    "turbo": "^2.8.14",
+    "typescript": "^5",
+    "wrangler": "^4.71.0"
   }
 }

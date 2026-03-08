@@ -1,7 +1,7 @@
 'use client';
 import { Clipboard } from 'lucide-react';
 import { useState } from 'react';
-import { Gallery } from './components/gallery';
+import { Gallery } from '../components/gallery';
 
 export default function Landing() {
   const [copied, setCopied] = useState<number | null>(null);
