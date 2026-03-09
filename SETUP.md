@@ -13,8 +13,7 @@ placeastro/
 ├── apps/
 │   ├── api/              # Cloudflare Workers (Hono + oRPC)
 │   │   ├── src/
-│   │   ├── wrangler.toml  # ローカル開発設定
-│   │   └── wrangler.jsonc # 本番デプロイ設定
+│   │   └── wrangler.jsonc # 設定 (default: ローカル, env.production: 本番)
 │   └── web/              # Vite + React + TanStack Router (SPA)
 │       └── src/
 ├── packages/
@@ -30,7 +29,7 @@ placeastro/
 ```bash
 pnpm install
 pnpm types:generate
-pnpm db:init:local
+pnpm db:migrate:local
 ```
 
 ### 2. 開発サーバー起動

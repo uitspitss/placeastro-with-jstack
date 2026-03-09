@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 const baseConfig = {
   dialect: 'sqlite',
-  schema: ['./src/server/db/schema.ts', './src/server/db/auth-schema.ts'],
+  schema: ['./src/schema.ts', './src/auth-schema.ts'],
 } satisfies Config;
 
 const prodConfig = {
