@@ -1,43 +1,74 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "placeastro-server",
   "compatibility_date": "2024-09-23",
-  "compatibility_flags": [
-    "nodejs_compat"
-  ],
+  "compatibility_flags": ["nodejs_compat"],
   "main": "src/index.ts",
-  "routes": [
-    {
-      "pattern": "placeastro-api.u7s.dev",
-      "custom_domain": true
-    }
-  ],
+
+  // Dev settings
   "dev": {
     "port": 8080,
     "local_protocol": "http",
     "upstream_protocol": "https"
   },
+
+  // Default: local development
   "vars": {
-    "CORS_ORIGIN": "https://placeastro.u7s.dev",
-    "BETTER_AUTH_URL": "https://placeastro.u7s.dev",
-    "IMGIX_HOSTNAME": "placeastro-r2.imgix.net",
-    "R2_BUCKET": "placeastro"
+    "CORS_ORIGIN": "http://localhost:3000",
+    "BETTER_AUTH_URL": "http://localhost:3000",
+    "IMGIX_HOSTNAME": "placeastro-dev.imgix.net",
+    "R2_BUCKET": "placeastro-dev"
   },
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "placeastro",
-      "database_id": "cea447ae-8fa0-4755-a225-bfb55009d411"
+      "database_name": "placeastro-dev",
+      "database_id": "local"
     }
   ],
   "r2_buckets": [
     {
       "binding": "R2",
-      "bucket_name": "placeastro"
+      "bucket_name": "placeastro-dev"
     }
   ],
   "observability": {
-    "enabled": true,
-    "head_sampling_rate": 1
+    "enabled": false
   },
-  "tail_consumers": [{"service": "placeastro-server-tail"}]
+
+  // Production environment
+  "env": {
+    "production": {
+      "vars": {
+        "CORS_ORIGIN": "https://placeastro.u7s.dev",
+        "BETTER_AUTH_URL": "https://placeastro.u7s.dev",
+        "IMGIX_HOSTNAME": "placeastro-r2.imgix.net",
+        "R2_BUCKET": "placeastro"
+      },
+      "routes": [
+        {
+          "pattern": "placeastro-api.u7s.dev",
+          "custom_domain": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "placeastro",
+          "database_id": "cea447ae-8fa0-4755-a225-bfb55009d411"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "R2",
+          "bucket_name": "placeastro"
+        }
+      ],
+      "observability": {
+        "enabled": true,
+        "head_sampling_rate": 1
+      },
+      "tail_consumers": [{ "service": "placeastro-server-tail" }]
+    }
+  }
 }
