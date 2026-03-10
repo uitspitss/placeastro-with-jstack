@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "placeastro-server",
+  "name": "placeastro-api",
   "compatibility_date": "2024-09-23",
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/index.ts",
@@ -68,7 +68,7 @@
         "enabled": true,
         "head_sampling_rate": 1
       },
-      "tail_consumers": [{ "service": "placeastro-server-tail" }]
+      "tail_consumers": [{ "service": "placeastro-api-tail" }]
     }
   }
 }
