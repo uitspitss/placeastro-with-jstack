@@ -1,10 +1,8 @@
-'use client';
-
 import { signIn, signOut, useSession } from '@/lib/auth-client';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 
-const Page = () => {
+const LoginPage = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -12,13 +10,12 @@ const Page = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const router = useRouter();
+  const navigate = useNavigate();
   const { data: session } = useSession();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: '' }));
     }
@@ -41,24 +38,16 @@ const Page = () => {
     setIsSubmitting(true);
     setSubmitError('');
     try {
-      // Simulate API call
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
-      // router.push('/welcome');
-
-      const { data, error } = await signIn.email(formData, {
-        onRequest: (ctx) => {
-          //show loading
-        },
-        onSuccess: (ctx) => {
-          //redirect to the dashboard or sign in page
-          router.push('/upload');
+      await signIn.email(formData, {
+        onRequest: () => {},
+        onSuccess: () => {
+          navigate({ to: '/upload' });
         },
         onError: (ctx) => {
-          // display the error message
           alert(ctx.error.message);
         },
       });
-    } catch (error) {
+    } catch (_error) {
       setSubmitError('Failed to submit form');
     } finally {
       setIsSubmitting(false);
@@ -73,20 +62,16 @@ const Page = () => {
 
       await signOut({
         fetchOptions: {
-          onRequest: (ctx) => {
-            //show loading
-          },
-          onSuccess: (ctx) => {
-            //redirect to the dashboard or sign in page
-            router.push('/login');
+          onRequest: () => {},
+          onSuccess: () => {
+            navigate({ to: '/login' });
           },
           onError: (ctx) => {
-            // display the error message
             alert(ctx.error.message);
           },
         },
       });
-    } catch (error) {
+    } catch (_error) {
       setSubmitError('Failed to sign out');
     } finally {
       setIsSubmitting(false);
@@ -164,4 +149,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default LoginPage;

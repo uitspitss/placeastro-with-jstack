@@ -3,7 +3,7 @@ import { type BetterAuthOptions, betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { drizzle } from 'drizzle-orm/d1';
 import { getContext } from 'hono/context-storage';
-import type { ServerEnv } from '../jstack';
+import type { HonoEnv } from '../orpc';
 
 const baseConfig = {
   emailAndPassword: {
@@ -12,7 +12,7 @@ const baseConfig = {
 } satisfies BetterAuthOptions;
 
 export const createAuth = () => {
-  const c = getContext<ServerEnv>();
+  const c = getContext<HonoEnv>();
   const db = drizzle(c.env.DB);
 
   const auth = betterAuth({

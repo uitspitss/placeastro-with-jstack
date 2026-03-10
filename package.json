@@ -26,8 +26,9 @@
     "db:generate": "pnpm --filter @placeastro/database generate",
     "db:migrate": "pnpm --filter @placeastro/database migrate",
     "db:studio": "pnpm --filter @placeastro/database studio",
-    "db:init:local": "cd apps/api && npx wrangler d1 execute DB --local --file=../../packages/database/drizzle/0000_init.sql && npx wrangler d1 execute DB --local --file=../../packages/database/drizzle/0001_auth.sql",
-    "setup": "pnpm install && pnpm types:generate && pnpm db:init:local"
+    "db:migrate:local": "pnpm --filter @placeastro/database migrate:local",
+    "db:seed:local": "pnpm --filter @placeastro/database seed:local",
+    "setup": "pnpm install && pnpm types:generate && pnpm db:migrate:local"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

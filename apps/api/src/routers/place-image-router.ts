@@ -1,93 +1,53 @@
 import { placeImages } from '@placeastro/database';
-import { PutObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { and, desc, eq } from 'drizzle-orm';
-import { env } from 'hono/adapter';
-import { HTTPException } from 'hono/http-exception';
-import { z } from 'zod';
-import { j, privateProcedure, publicProcedure } from '../jstack';
-import { getS3Client } from '../lib/s3';
 import {
   createPlaceImageSchema,
   getUploadUrlSchema,
 } from '@placeastro/shared';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { ORPCError } from '@orpc/server';
+import { z } from 'zod';
+import { privateProcedure, publicProcedure } from '../orpc';
+import { getS3Client } from '../lib/s3';
+import { getPlaceImageByKey, listPlaceImages } from '../services/place-image-service';
 
-export const placeImageRouter = j.router({
-  health: publicProcedure.query(async ({ c }) => {
-    return c.superjson('OK');
-  }),
+export const placeImageRouter = {
+  health: publicProcedure.handler(async () => 'OK' as const),
 
-  list: publicProcedure.query(async ({ c, ctx }) => {
-    const { db } = ctx;
-
-    const images = await db
-      .select()
-      .from(placeImages)
-      .orderBy(desc(placeImages.createdAt));
-
-    return c.superjson(images);
+  list: publicProcedure.handler(async ({ context }) => {
+    return listPlaceImages(context.db);
   }),
 
   getByKey: publicProcedure
     .input(z.object({ key: z.string() }))
-    .query(async ({ c, ctx, input }) => {
-      const { db } = ctx;
-
-      const [catalogue, catalogueNumber] = input.key.split('/');
-      if (!catalogue || !catalogueNumber) {
-        throw new HTTPException(400, { message: 'Invalid key' });
+    .handler(async ({ context, input }) => {
+      const image = await getPlaceImageByKey(context.db, input.key);
+      if (!image) {
+        throw new ORPCError('NOT_FOUND', { message: 'Image not found' });
       }
-
-      if (catalogue !== 'M' && catalogue !== 'NGC') {
-        throw new HTTPException(400, { message: 'Invalid catalogue' });
-      }
-
-      const images = await db
-        .select()
-        .from(placeImages)
-        .where(
-          and(
-            eq(placeImages.catalogue, catalogue),
-            eq(placeImages.catalogueNumber, catalogueNumber),
-          ),
-        );
-      if (!images.length) {
-        throw new HTTPException(404, { message: 'Image not found' });
-      }
-
-      return c.superjson(images[0]);
+      return image;
     }),
 
   create: privateProcedure
     .input(createPlaceImageSchema.merge(z.object({ url: z.string().url() })))
-    .post(async ({ ctx, c, input }) => {
-      const { db } = ctx;
-
-      const placeImage = await db.insert(placeImages).values({
+    .handler(async ({ context, input }) => {
+      return context.db.insert(placeImages).values({
         id: crypto.randomUUID(),
         ...input,
-        catalogue: input.catalogue,
       });
-
-      return c.superjson(placeImage);
     }),
 
   getUploadUrl: privateProcedure
     .input(getUploadUrlSchema)
-    .post(async ({ ctx, c, input }) => {
-      const { IMGIX_HOSTNAME, R2_BUCKET } = env(c);
-
+    .handler(async ({ context, input }) => {
+      const { IMGIX_HOSTNAME, R2_BUCKET } = context.env;
       const s3 = getS3Client();
       const uploadUrl = await getSignedUrl(
         s3,
         new PutObjectCommand({ Bucket: R2_BUCKET, Key: input.key }),
-        {
-          expiresIn: 60, // 1 min
-        },
+        { expiresIn: 60 },
       );
-
       const imgixUrl = `https://${IMGIX_HOSTNAME}/${input.key}`;
-
-      return c.superjson({ uploadUrl, imgixUrl });
+      return { uploadUrl, imgixUrl };
     }),
-});
+};

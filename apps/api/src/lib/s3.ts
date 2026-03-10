@@ -1,9 +1,9 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { getContext } from 'hono/context-storage';
-import type { ServerEnv } from '../jstack';
+import type { HonoEnv } from '../orpc';
 
 export const getS3Client = () => {
-  const c = getContext<ServerEnv>();
+  const c = getContext<HonoEnv>();
 
   return new S3Client({
     region: 'auto',
