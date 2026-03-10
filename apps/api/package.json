@@ -5,15 +5,13 @@
   "main": "./src/client-types.ts",
   "types": "./src/client-types.ts",
   "scripts": {
-    "dev": "wrangler dev --config wrangler.toml --local --persist-to .wrangler/state",
-    "dev:remote": "wrangler dev --config wrangler.jsonc",
-    "build": "wrangler deploy --config wrangler.jsonc --dry-run --outdir dist",
-    "deploy": "wrangler deploy --config wrangler.jsonc",
+    "dev": "wrangler dev --local --persist-to .wrangler/state",
+    "dev:remote": "wrangler dev --env production",
+    "build": "wrangler deploy --env production --dry-run --outdir dist",
+    "deploy": "wrangler deploy --env production",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist node_modules .wrangler",
-    "wrangler:types": "wrangler types --config wrangler.toml && mv worker-configuration.d.ts src/types/worker-configuration.d.ts",
-    "db:init": "wrangler d1 execute DB --local --file=../../packages/database/drizzle/0000_init.sql",
-    "db:seed": "wrangler d1 execute placeastro-dev --local --file=../../packages/database/drizzle/seed.sql"
+    "wrangler:types": "wrangler types && mv worker-configuration.d.ts src/types/worker-configuration.d.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.777.0",
@@ -23,9 +21,9 @@
     "better-auth": "^1.2.1",
     "drizzle-orm": "^0.39.0",
     "hono": "^4.7.0",
-    "jstack": "^1.0.6",
+    "@orpc/client": "^1.4.3",
+    "@orpc/server": "^1.4.3",
     "neverthrow": "^8.2.0",
-    "superjson": "^2.2.1",
     "wrangler": "^4.71.0",
     "zod": "^3.24.1"
   },

@@ -5,7 +5,6 @@ import {
   CarouselItem,
 } from '@placeastro/ui';
 import Autoplay from 'embla-carousel-autoplay';
-import Image from 'next/image';
 import * as React from 'react';
 
 type Props = {
@@ -31,11 +30,10 @@ export function Gallery({ imageUrls }: Props) {
         {imageUrls.map((imageUrl) => (
           <CarouselItem key={imageUrl} className="relative">
             <AspectRatio ratio={1 / 1}>
-              <Image
+              <img
                 src={imageUrl}
                 alt="placeholder image"
-                layout="fill"
-                objectFit="cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </AspectRatio>
           </CarouselItem>

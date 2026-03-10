@@ -6,11 +6,13 @@
   "types": "./src/index.ts",
   "scripts": {
     "generate": "cross-env LOCAL_DB_PATH=$(find ../../apps/api/.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit generate",
-    "migrate": "wrangler d1 execute placeastro --local --config=../../apps/api/wrangler.jsonc",
+    "migrate:local": "wrangler d1 execute DB --local --config=../../apps/api/wrangler.jsonc --file=./drizzle/0000_init.sql && wrangler d1 execute DB --local --config=../../apps/api/wrangler.jsonc --file=./drizzle/0001_auth.sql",
     "migrate:prod": "cross-env NODE_ENV=production drizzle-kit migrate",
+    "seed:local": "wrangler d1 execute DB --local --config=../../apps/api/wrangler.jsonc --file=./drizzle/seed.sql",
     "push": "drizzle-kit push",
     "studio": "cross-env LOCAL_DB_PATH=$(find ../../apps/api/.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
     "studio:prod": "cross-env NODE_ENV=production drizzle-kit studio",
+    "dev": "cross-env LOCAL_DB_PATH=$(find ../../apps/api/.wrangler/state/v3/d1/miniflare-D1DatabaseObject -type f -name '*.sqlite' -print -quit) drizzle-kit studio",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf node_modules"
   },

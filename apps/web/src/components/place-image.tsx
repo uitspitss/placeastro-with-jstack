@@ -1,9 +1,7 @@
-'use client';
-import { getClient } from '@/lib/client';
+import { client } from '@/lib/client';
 import { createQueryKey } from '@/lib/query-key';
 import { cn } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 
 type Props = {
   imageKey: string;
@@ -17,15 +15,7 @@ export default function PlaceImage({ imageKey, className }: Props) {
     error,
   } = useQuery({
     queryKey: createQueryKey('placeImage').detail(imageKey),
-    queryFn: async () => {
-      const res = await getClient().placeImages.getByKey.$get({
-        key: imageKey,
-      });
-      if (!res.ok) {
-        throw new Error('Failed to fetch image');
-      }
-      return res.json();
-    },
+    queryFn: () => client.placeImages.getByKey({ key: imageKey }),
   });
 
   if (error instanceof Error) {
@@ -40,12 +30,10 @@ export default function PlaceImage({ imageKey, className }: Props) {
 
   return (
     <div className={cn('relative w-24 h-24', className)}>
-      <Image
+      <img
         src={placeImage.url}
         alt={imageKey ?? 'place image'}
-        layout="fill"
-        objectFit="cover"
-        className="rounded-md"
+        className="absolute inset-0 w-full h-full object-cover rounded-md"
       />
     </div>
   );
