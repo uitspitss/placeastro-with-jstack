@@ -6,7 +6,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { ThemeProvider } from '@/components/theme-provider';
 import { router } from '@/router';
 import './globals.css';
 
@@ -22,13 +21,7 @@ const rootElement = document.getElementById('root')!;
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="dark"
-        disableTransitionOnChange
-      >
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   </StrictMode>,
 );
