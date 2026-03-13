@@ -63,6 +63,8 @@ app.use('/api/rpc/*', async (c, next) => {
   await next();
 });
 
+app.get('/', (c) => c.redirect('/docs'));
+
 app.route('/', imageRoutes);
 
 export default app;

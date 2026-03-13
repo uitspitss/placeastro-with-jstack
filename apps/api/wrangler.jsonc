@@ -47,8 +47,8 @@
       },
       "routes": [
         {
-          "pattern": "placeastro-api.u7s.dev",
-          "custom_domain": true
+          "pattern": "placeastro.u7s.dev/*",
+          "zone_name": "u7s.dev"
         }
       ],
       "d1_databases": [
