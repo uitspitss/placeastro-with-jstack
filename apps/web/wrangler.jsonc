@@ -2,13 +2,15 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "placeastro-web",
   "compatibility_date": "2024-09-23",
+  "main": "src/worker.ts",
   "assets": {
     "directory": "dist",
+    "binding": "ASSETS",
     // SPA fallback: serve index.html for all non-asset routes
     "not_found_handling": "single-page-application"
   },
 
-  // Dev settings  
+  // Dev settings
   "dev": {
     "port": 3000,
     "local_protocol": "http"
@@ -19,8 +21,8 @@
     "production": {
       "routes": [
         {
-          "pattern": "placeastro.u7s.dev",
-          "custom_domain": true
+          "pattern": "placeastro.u7s.dev/docs/*",
+          "zone_name": "u7s.dev"
         }
       ]
     }
