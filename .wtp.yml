@@ -1,0 +1,10 @@
+version: "1.0"
+defaults:
+  base_dir: "../placeastro-worktrees"
+
+hooks:
+  post_create:
+    - type: copy
+      from: ".env"
+    - type: command
+      run: pnpm install

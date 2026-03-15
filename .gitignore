@@ -69,3 +69,6 @@ temp/
 
 # Playwright
 .playwright-mcp/
+
+# wtp worktrees
+*-worktrees/

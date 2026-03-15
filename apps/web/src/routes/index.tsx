@@ -13,11 +13,7 @@ export default function Landing() {
     'https://placeastro.u7s.dev/random?w=600&h=480',
     'https://placeastro.u7s.dev/m/74/info',
   ];
-  const galleryUrls = [
-    `${API_URL}/m/1`,
-    `${API_URL}/m/2`,
-    `${API_URL}/m/3`,
-  ];
+  const galleryUrls = [`${API_URL}/m/1`, `${API_URL}/m/2`, `${API_URL}/m/3`];
 
   const handleCopy = async (text: string, index: number) => {
     await navigator.clipboard.writeText(text);

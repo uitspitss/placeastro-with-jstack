@@ -11,25 +11,28 @@
     "build": "wrangler deploy --env production --dry-run --outdir dist",
     "deploy": "wrangler deploy --env production",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "clean": "rm -rf dist node_modules .wrangler",
     "wrangler:types": "wrangler types && mv worker-configuration.d.ts src/types/worker-configuration.d.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.777.0",
     "@aws-sdk/s3-request-presigner": "^3.777.0",
+    "@orpc/client": "^1.4.3",
+    "@orpc/server": "^1.4.3",
     "@placeastro/database": "workspace:*",
     "@placeastro/shared": "workspace:*",
     "better-auth": "^1.2.1",
     "drizzle-orm": "^0.39.0",
     "hono": "^4.7.0",
-    "@orpc/client": "^1.4.3",
-    "@orpc/server": "^1.4.3",
     "neverthrow": "^8.2.0",
     "wrangler": "^4.71.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240815.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.0"
   }
 }

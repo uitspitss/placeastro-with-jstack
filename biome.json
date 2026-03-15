@@ -8,7 +8,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "ignore": [".next", "node_modules", ".wrangler"]
+    "ignore": [".next", "node_modules", ".wrangler", ".claude/skills"]
   },
   "formatter": {
     "enabled": true,
@@ -25,11 +25,7 @@
         "noUnusedImports": "error"
       },
       "nursery": {
-        "useGoogleFontDisplay": "error",
-        "noDocumentImportInPage": "error",
-        "noHeadElement": "error",
-        "noHeadImportInDocument": "error",
-        "noImgElement": "error"
+        "useGoogleFontDisplay": "error"
       }
     }
   },
@@ -42,13 +38,13 @@
   "overrides": [
     {
       "include": ["src/**/*.test.tsx", "src/**/*.stories.tsx"],
-        "linter": {
-          "rules": {
-            "correctness": {
-              "noUnusedImports": "off"
-            }
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedImports": "off"
           }
         }
+      }
     }
   ]
 }
