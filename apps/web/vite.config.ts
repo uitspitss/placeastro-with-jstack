@@ -17,6 +17,14 @@ export default defineConfig({
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
+      '/m': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+      '/random': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
     },
   },
   build: {
