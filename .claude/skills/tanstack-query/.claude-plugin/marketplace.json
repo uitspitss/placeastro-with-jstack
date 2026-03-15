@@ -1,0 +1,14 @@
+{
+  "name": "dream-team-marketplace",
+  "owner": {
+    "name": "Andrii Shchupliak"
+  },
+  "description": "Multi-agent AI development team plugins for Claude Code",
+  "plugins": [
+    {
+      "name": "dream-team",
+      "source": "./",
+      "description": "Project-agnostic multi-agent AI development team with context engineering and discovery-first workflow. Includes specialized agents (discovery, analyst, architect, developer, qa, devops), team coordination commands, and reusable skills library for common tech stacks."
+    }
+  ]
+}

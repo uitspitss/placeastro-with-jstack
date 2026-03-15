@@ -1,0 +1,22 @@
+{
+  "name": "dream-team",
+  "description": "Effective Claude workflows - /solo for 90% of tasks, /team for complex features. Based on official Anthropic patterns.",
+  "version": "3.0.0",
+  "author": {
+    "name": "Andrii Shchupliak"
+  },
+  "homepage": "https://github.com/ashchupliak/dream-team",
+  "repository": "https://github.com/ashchupliak/dream-team.git",
+  "license": "MIT",
+  "keywords": [
+    "solo",
+    "workflow",
+    "agents",
+    "team",
+    "context-engineering",
+    "best-practices",
+    "development-workflow",
+    "skills"
+  ],
+  "hooks": "./hooks/hooks.json"
+}

@@ -1,8 +1,4 @@
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@placeastro/ui';
+import { Carousel, CarouselContent, CarouselItem } from '@placeastro/ui';
 import Autoplay from 'embla-carousel-autoplay';
 import * as React from 'react';
 
@@ -28,11 +24,7 @@ export function Gallery({ imageUrls }: Props) {
       <CarouselContent>
         {imageUrls.map((imageUrl) => (
           <CarouselItem key={imageUrl} className="aspect-square">
-            <img
-              src={imageUrl}
-              alt="placeholder image"
-              className="w-full h-full object-cover"
-            />
+            <img src={imageUrl} alt="" className="w-full h-full object-cover" />
           </CarouselItem>
         ))}
       </CarouselContent>

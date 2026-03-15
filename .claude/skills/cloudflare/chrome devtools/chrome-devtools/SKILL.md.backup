@@ -1,0 +1,146 @@
+---
+name: chrome-devtools
+description: Use this skill when working with Chrome DevTools, browser debugging, performance profiling, network analysis, JavaScript debugging, CSS inspection, element inspection, console usage, or any web development debugging workflows.
+---
+
+# Chrome-Devtools Skill
+
+Comprehensive assistance with chrome-devtools development, generated from official documentation.
+
+## When to Use This Skill
+
+This skill should be triggered when:
+- Working with chrome-devtools
+- Asking about chrome-devtools features or APIs
+- Implementing chrome-devtools solutions
+- Debugging chrome-devtools code
+- Learning chrome-devtools best practices
+
+## Quick Reference
+
+### Common Patterns
+
+**Pattern 1:** Kayce Basques X GitHub Sofia Emelianova GitHub This tutorial teaches you the basic workflow for debugging any JavaScript issue in DevTools. Read on, or watch the video version of this tutorial. Reproduce the bug Finding a series of actions that consistently reproduces a bug is always the first step to debugging. Open this demo in a new tab. Enter 5 in the Number 1 box. Enter 1 in the Number 2 box. Click Add Number 1 and Number 2. The label below the button says 5 + 1 = 51. The result should be 6. This is the bug you're going to fix. In this example, the result of 5 + 1 is 51. It should be 6. Get familiar with the Sources panel UI DevTools provides a lot of different tools for different tasks, such as changing CSS, profiling page load performance, and monitoring network requests. The Sources panel is where you debug JavaScript. Open DevTools and navigate to the Sources panel. The Sources panel has three sections: The Page tab with the file tree. Every file that the page requests is listed here. The Code Editor section. After selecting a file in the Page tab, the contents of that file are displayed here. The Debugger section. Various tools for inspecting the page's JavaScript. If your DevTools window is wide, by default, the Debugger is to the right of the Code Editor. In this case, the Scope and Watch tabs join Breakpoints, Call stack, and others as collapsible sections. Pause the code with a breakpoint A common method for debugging a problem like this is to insert a lot of console.log() statements into the code, in order to inspect values as the script executes. For example: function updateLabel() { var addend1 = getNumber1(); console.log('addend1:', addend1); var addend2 = getNumber2(); console.log('addend2:', addend2); var sum = addend1 + addend2; console.log('sum:', sum); label.textContent = addend1 + ' + ' + addend2 + ' = ' + sum; } The console.log() method may get the job done, but breakpoints can get it done faster. A breakpoint lets you pause your code in the middle of its execution, and examine all values at that moment in time. Breakpoints have a few advantages over the console.log() method: With console.log(), you need to manually open the source code, find the relevant code, insert the console.log() statements, and then reload the page in order to see the messages in the Console. With breakpoints, you can pause on the relevant code without even knowing how the code is structured. In your console.log() statements you need to explicitly specify each value that you want to inspect. With breakpoints, DevTools shows you the values of all variables at that moment in time. Sometimes there are variables affecting your code that you're not even aware of. In short, breakpoints can help you find and fix bugs faster than the console.log() method. If you take a step back and think about how the app works, you can make an educated guess that the incorrect sum (5 + 1 = 51) gets computed in the click event listener that's associated to the Add Number 1 and Number 2 button. Therefore, you probably want to pause the code around the time that the click listener executes. Event Listener Breakpoints let you do exactly that: In the Debugger section, click Event Listener Breakpoints to expand the section. DevTools reveals a list of expandable event categories, such as Animation and Clipboard. Next to the Mouse event category, click arrow_right Expand. DevTools reveals a list of mouse events, such as click and mousedown. Each event has a checkbox next to it. Check the click checkbox. DevTools is now set up to automatically pause when any click event listener executes. Back on the demo, click Add Number 1 and Number 2 again. DevTools pauses the demo and highlights a line of code in the Sources panel. DevTools should be paused on this line of code: function onClick() { If you're paused on a different line of code, press resume Resume Script Execution until you're paused on the correct line. Note: If you paused on a different line, you have a browser extension that registers a click event listener on every page that you visit. You were paused in the extension's click listener. If you use Incognito Mode to browse in private, which disables all extensions, you can see that you pause on the correct line of code every time. Event Listener Breakpoints are just one of many types of breakpoints available in DevTools. It's worth exploring all the different types, because each type ultimately helps you debug different scenarios as quickly as possible. See Pause Your Code With Breakpoints to learn when and how to use each type. Step through the code One common cause of bugs is when a script executes in the wrong order. Stepping through your code lets you walk through your code's execution, one line at a time, and figure out exactly where it's executing in a different order than you expected. Try it now: On the Sources panel of DevTools, click step_into Step into next function call to step through the execution of the onClick() function, one line at a time. DevTools highlights the following line of code: if (inputsAreEmpty()) { Click step_over Step over next function call. DevTools executes inputsAreEmpty() without stepping into it. Notice how DevTools skips a few lines of code. This is because inputsAreEmpty() evaluated to false, so the if statement's block of code didn't execute. That's the basic idea of stepping through code. If you look at the code in get-started.js, you can see that the bug is probably somewhere in the updateLabel() function. Rather than stepping through every line of code, you can use another type of breakpoint to pause the code closer to the probable location of the bug. Set a line-of-code breakpoint Line-of-code breakpoints are the most common type of breakpoint. When you've got a specific line of code that you want to pause on, use a line-of-code breakpoint: Look at the last line of code in updateLabel(): label.textContent = addend1 + ' + ' + addend2 + ' = ' + sum; To the left of the code you can see the line number of this particular line of code, which is 32. Click 32. DevTools puts a blue icon on top of 32. This means that there is a line-of-code breakpoint on this line. DevTools now always pauses before this line of code is executed. Click resume Resume script execution. The script continues executing until it reaches line 32. On lines 29, 30, and 31, DevTools shows the values of addend1, addend2, and sum inline next to their declarations. In this example, DevTools pauses on the line-of-code breakpoint on line 32. Check variable values The values of addend1, addend2, and sum look suspicious. They're wrapped in quotes, which means that they're strings. This is a good hypothesis for the explaining the cause of the bug. Now it's time to gather more information. DevTools provides a lot of tools for examining variable values. Method 1: Inspect the Scope When you're paused on a line of code, the Scope tab shows you what local and global variables are defined at this point in execution, along with the value of each variable. It also shows closure variables, when applicable. When you're not paused on a line of code, the Scope tab is empty. Double-click a variable value to edit it. Note: Depending on your layout preference and the width of your DevTools window, the Scope tab may appear as a collapsible section together with Breakpoints and Call stack. Method 2: Watch expressions The Watch tab lets you monitor the values of variables over time. Watch isn't just limited to variables. You can store any valid JavaScript expression in the Watch tab. Note: Depending on your layout preference and the width of your DevTools window, the Watch tab may appear as a collapsible section together with Breakpoints and Call stack. Try it now: Click the Watch tab. Click add Add watch expression. Type typeof sum. Press Enter. DevTools shows typeof sum: "string". The value to the right of the colon is the result of your expression. This screenshot shows the Watch tab (bottom-right) after creating the typeof sum watch expression. As suspected, sum is being evaluated as a string, when it should be a number. You've now confirmed that this is the cause of the bug. Method 3: The Console In addition to viewing console.log() messages, you can also use the Console to evaluate arbitrary JavaScript statements. In terms of debugging, you can use the Console to test out potential fixes for bugs. Try it now: If you don't have the Console drawer open, press Escape to open it. It opens at the bottom of your DevTools window. In the Console, type parseInt(addend1) + parseInt(addend2). This statement works because you are paused on a line of code where addend1 and addend2 are in scope. Press Enter. DevTools evaluates the statement and prints out 6, which is the result you expect the demo to produce. This screenshot shows the Console drawer after evaluating parseInt(addend1) + parseInt(addend2). Apply a fix You've found a fix for the bug. All that's left is to try out your fix by editing the code and re-running the demo. You don't need to leave DevTools to apply the fix. You can edit JavaScript code directly within the DevTools UI. Try it now: Click resume Resume script execution. In the Code Editor, replace line 31, var sum = addend1 + addend2, with var sum = parseInt(addend1) + parseInt(addend2). Press Command + S (Mac) or Control + S (Windows, Linux) to save your change. Click label_off Deactivate breakpoints. Its color changes to blue to indicate that it's active. While this is set, DevTools ignores any breakpoints you've set. Try out the demo with different values. The demo now calculates correctly. Caution: This workflow only applies a fix to the code that is running in your browser. It won't fix the code for all users that visit your page. To do that, you need to fix the code that's on your servers. You can, however, edit files in DevTools and save them to your sources with Workspaces. Tip: Starting from Chrome version 105, you can Edit a paused function live. Next steps Success: Congratulations! You now know how to make the most of Chrome DevTools when debugging JavaScript. The tools and methods you learned in this tutorial can save you countless hours. This tutorial only showed you two ways to set breakpoints. DevTools offers many other ways, including: Conditional breakpoints that are only triggered when the condition that you provide is true. Breakpoints on caught or uncaught exceptions. XHR breakpoints that are triggered when the requested URL matches a substring that you provide. See Pause Your Code With Breakpoints to learn when and how to use each type. There's a couple of code stepping controls that weren't explained in this tutorial. See Step over line of code to learn more.
+
+```
+5
+```
+
+**Pattern 2:** A common method for debugging a problem like this is to insert a lot of console.log() statements into the code, in order to inspect values as the script executes. For example:
+
+```
+console.log()
+```
+
+**Pattern 3:** Call queryObjects(Constructor) from the console to return an array of objects that were created with the specified constructor. For example:
+
+```
+queryObjects(Constructor)
+```
+
+**Pattern 4:** Jecelyn Yeen X GitHub Bluesky Homepage Nancy Li LinkedIn Dale St. Marthe LinkedIn Use the Performance panel to profile the performance of Node.js and Deno applications. Deprecated: Previously, you might have used the JS Profiler panel, but it's now deprecated. What's a CPU profile? A CPU profile is a report that shows how the CPU was used over a period of time. It can show which programs were using the most CPU time, which processes were running, and how much time was spent in each state. With CPU profiles, you can identify performance bottlenecks and optimize CPU resource utilization. Open DevTools for Node In the command line, run: Node.jsnode --inspect file-name.js Denodeno --inspect file-name.js Connect to DevTools for Node in one of the following ways: Open DevTools and click the green Node button in the DevTools action bar at the top. In the address bar enter chrome://inspect, then click one of the following: Open dedicated DevTools for Node under Devices. Inspect under the target you want to profile. Profile the CPU To profile the CPU, open the Performance panel and click the radio_button_checked Record button two times to start and end profiling. Tip: Optionally, you can choose a JavaScript VM instance by selecting it from the drop-down list at the right of the action bar. Analyze profiling results After you stop the recording, the Performance panel organizes and displays data about the recording in a "profile". Use the following tabs to analyze the profiling data: Timeline overview. Located at the top under the activity bar. Shows CPU and NET activity charts on a timeline. Use it to identify performance bottlenecks. Bottom-Up: Use this tab to inspect a selected portion of the recording and see aggregated time spent on individual activities. Call Tree: This tab displays the root activities of a selected portion of the recording. Root activities also have their call stacks nested. Use this tab to identify which activity is causing the most work. Event Log: This tab lists activities from a selected portion of the recording in the order that they occurred. Profile with the console.profile() command DevTools lets you profile JavaScript CPU performance with the console.profile() command. You can add this command to your code and then run the file, or copy and paste your code into the Console. The Performance panel will show you the results. To use this command, follow these steps: Enclose your code with console.profile() and console.profileEnd(), for example: console.profile( profile ${i} ); // Code to be profiled doSomething(); console.profileEnd(); Run your code in one of two ways: If you're using the Console, open DevTools for Node, paste your code to the Console, and press Enter. In the command line, run: Node.jsnode --inspect file-name.js Denodeno --inspect file-name.js Then open DevTools for Node. Once the profile is completed, the result will be shown in the Performance panel automatically.
+
+```
+node --inspect file-name.js
+```
+
+**Pattern 5:** Enclose your code with console.profile() and console.profileEnd(), for example:
+
+```
+console.profile()
+```
+
+**Pattern 6:** Matthias Rohmer X GitHub LinkedIn Bluesky Use the AI assistance panel to learn more about how your website works with the help of AI. Experimental: The AI assistance panel is experimental and available in Chrome Canary 131 and later. Before getting started make sure to understand Known issues and How your data is used. Overview The AI assistance panel lets you chat with Gemini directly in DevTools. Conversations you start from this panel automatically have context about technical details of the page you are inspecting. When using the AI assistance panel you can either use provided example prompts or your own questions as a starting point for conversations and continue with as many follow-up questions as needed to solve your task. Chats in the AI assistance panel can help you to understand more about: Styling: Ask about elements from the DOM tree and learn why they are displayed a certain way, how they interact with each other, and solve styling challenges with provided fixes. Network requests. Ask about requests that are sent in the context of your page. Understand where they are coming from, how long they take or why they fail. Sources. Ask questions about files loaded by your web page. Learn more about their contents and purpose. Performance. Ask about activities from a performance profile recorded in the Performance panel and get suggestions for improvement. Requirements To use the AI assistance panel, make sure that you: Your location (TW) is supported. Are at least 18 years old and are in one of the supported locations. Are using the latest version of Chrome. Are signed into Chrome with your Google Account. Have English (US) selected in settings Settings > Preferences > Appearance > Language in DevTools. Have enabled settings Settings > AI Innovations in DevTools. How your data is used This notice together with our privacy notice describe how AI Innovations in Chrome DevTools handle your data. Read carefully. Chrome DevTools AI assistance uses any data the inspected page is exposing through Web APIs. Google collects this input data, generated output, related feature usage information, and your feedback. Google uses this data to provide, improve, and develop Google products and services and machine learning technologies, including Google's enterprise products such as Google Cloud. To help with quality and improve our products, human reviewers may read, annotate, and process the above-mentioned input data, generated output, related feature usage information, and your feedback. Don't include sensitive (for example, confidential) or personal information that can be used to identify you or others in your prompts or feedback. Your data will be stored in a way where Google cannot tell who provided it and can no longer fulfill any deletion requests and will be retained for up to 18 months. We may not collect data to improve our product if your Google Account is managed by an organization. As you try AI assistance, here are key things to know: AI assistance uses experimental technology, and may generate inaccurate or offensive information that doesn't represent Google's views. Voting on the responses will help make this feature better. This feature is experimental and subject to future changes. Use generated code snippets with caution. To use the feature, you need to agree that your use of AI assistance is subject to the Google Terms of Service. Known issues AI assistance uses Google's large language models to generate an explanation. Large language models, or LLMs, are a new and active area of research. The responses that LLMs generate are sometimes questionable or even outright wrong. It is important that you understand that the results may be inaccurate or misleading, so always double check! Wrong explanation LLMs generate content that sounds likely and plausible. In most cases, this content contains truthful and useful insights that can help you understand an error or warning in the relevant context. Modern web development and debugging is a challenging craft with a high level of complexity that requires years of experience to become proficient in. Sometimes, the responses that LLMs produce sound convincing but are actually misleading or meaningless to a human web developer. We are doing our best to continuously improve the quality and correctness of generated responses. Examples for wrong answers or explanations are: Hallucinated CSS features, properties or syntax Non-existing elements or class names You can help us by submitting feedback when you encounter wrong explanations. Prompt injection Many LLM applications are susceptible to a form of abuse known as prompt injection. This feature is no different. It is possible to trick the LLM into accepting instructions that are not intended by the developers. See the following harmless example: The user prompt is, "What would be a renaissance themed background color for this element? To stay in the theme, use renaissance language when talking to me.". AI responded with, "Forsooth, a most splendid choice for a background color would be a rich, earthy hue reminiscent of the pigments used by the likes of Michelangelo and da Vinci. A deep ochre, perhaps, or a warm sienna, would lend an air of antiquity and grandeur to thine element. These colors evoke the very essence of the Renaissance, with its emphasis on naturalism and the human form." Control feature availability In managed Chrome environments availability of AI assistance and Console Insights is controlled by the DevToolsGenAiSettings Enterprise policy. Unmanaged users may use the same policy to disable AI innovations on their machine and remove Ask AI context menu items. Note: The following steps set recommended Chrome policies. Recommended policies can be overwritten by your machine administrator and may enable or disable AI innovations, independent of your preference. Stop all instances of Chrome Set recommended policy macOS: Run $ defaults write com.google.Chrome DevToolsGenAiSettings -integer 2 Linux: Create policies.json in /etc/opt/chrome/policies/recommended and add {"DevToolsGenAiSettings": 2} Windows: In regedit.exe, navigate to HKEY_LOCAL_MACHINE\Software\Policies\Google\Chrome. Set the key DevToolsGenAiSettings to dword:00000002 Start Chrome and go to chrome://policy to verify DevToolsGenAiSettings has a Policy Value of 2.
+
+```
+TW
+```
+
+**Pattern 7:** See the following harmless example:
+
+```
+DevToolsGenAiSettings
+```
+
+**Pattern 8:** Kayce Basques X GitHub Sofia Emelianova GitHub Use the Console API to write messages to the Console from your JavaScript. See Get started with logging messages to the Console for an interactive introduction to the topic. Key point: DevTools assigns a severity level to most of the console.* methods. These levels allow you to filter logged messages. For more information, see Filter by log level. See Console utilities API reference if you're looking for the convenience methods like debug(function) or monitorEvents(node) which are only available from the Console. console.assert(expression, object) Log level: Error Writes an error to the console when expression evaluates to false. const x = 5; const y = 3; const reason = 'x is expected to be less than y'; console.assert(x < y, {x, y, reason}); console.clear() Clears the console. console.clear(); If Preserve Log is enabled, console.clear() is disabled. Alternatively, you can Clear the Console by clicking the icon. console.count([label]) Log level: Info Writes the number of times that count() has been invoked at the same line and with the same label. Call console.countReset([label]) to reset the count. console.count(); console.count('coffee'); console.count(); console.count(); console.countReset([label]) Resets a count. console.countReset(); console.countReset('coffee'); console.createTask(name) Key point: This method is known as the Async Stack Tagging API. If you use a framework or abstraction for scheduling and async execution that already uses this API under the hood, you don't need to call this API directly. Returns a Task instance that associates the current stack trace with the created task object. You can later use this task object to run a function (f in the following example). The task.run(f) executes an arbitrary payload and forwards the return value back to the caller. // Task creation const task = console.createTask(name); // Task execution task.run(f); // instead of f(); The task forms a link between the creation context and the context of the async function. This link lets DevTools show better stack traces for async operations. For more information, see Linked Stack Traces. console.debug(object [, object, ...]) Log level: Verbose Identical to console.log(object [, object, ...]) except different log level. console.debug('debug'); console.dir(object) Log level: Info Prints a JSON representation of the specified object. console.dir(document.head); console.dirxml(node) Log level: Info Prints an XML representation of the descendants of node. console.dirxml(document); console.error(object [, object, ...]) Log level: Error Prints object to the Console, formats it as an error, and includes a stack trace. console.error("I'm sorry, Dave. I'm afraid I can't do that."); console.group(label) Visually groups messages together until console.groupEnd(label) is called. Use console.groupCollapsed(label) to collapse the group when it's initially logged to the Console. const label = 'Adolescent Irradiated Espionage Tortoises'; console.group(label); console.info('Leo'); console.info('Mike'); console.info('Don'); console.info('Raph'); console.groupEnd(label); Additionally, you can nest groups. const timeline1 = 'New York 2012'; const timeline2 = 'Camp Lehigh 1970'; console.group(timeline1); console.info('Mind'); console.info('Time'); console.group(timeline2); console.info('Space'); console.info('Extra Pym Particles'); console.groupEnd(timeline2); console.groupEnd(timeline1); console.groupCollapsed(label) Same as console.group(label), except the group is initially collapsed when it's logged to the Console. console.groupEnd(label) Stops visually grouping messages. See console.group. console.info(object [, object, ...]) Log level: Info Identical to console.log(object [, object, ...]). console.info('info'); console.log(object [, object, ...]) Log level: Info Prints a message to the Console. console.log('log'); console.table(array [, columns]) Log level: Info Logs an array of objects as a table. var people = [ { first: 'René', last: 'Magritte', }, { first: 'Chaim', last: 'Soutine', birthday: '18930113', }, { first: 'Henri', last: 'Matisse', } ]; console.table(people); By default, console.table() logs all table data. To display a single column or a subset of columns, you can use the second optional parameter and specify column name or names as a string or an array of strings. For example: console.table(people, ['last', 'birthday']); console.time([label]) Starts a new timer. Call console.timeEnd([label]) to stop the timer and print the elapsed time to the Console. console.time(); for (var i = 0; i < 100000; i++) { let square = i ** 2; } console.timeEnd(); console.timeEnd([label]) Log level: Info Stops a timer. See console.time(). console.trace() Log level: Info Prints a stack trace to the Console. const first = () => { second(); }; const second = () => { third(); }; const third = () => { fourth(); }; const fourth = () => { console.trace(); }; first(); console.warn(object [, object, ...]) Log level: Warning Prints a warning to the Console. console.warn('warn');
+
+```
+console.*
+```
+
+### Example Code Patterns
+
+**Example 1** (javascript):
+```javascript
+let images = $$('img');
+for (let each of images) {
+  console.log(each.src);
+}
+```
+
+**Example 2** (javascript):
+```javascript
+let images = $$('img', document.querySelector('.devsite-header-background'));
+for (let each of images) {
+  console.log(each.src);
+}
+```
+
+## Reference Files
+
+This skill includes comprehensive documentation in `references/`:
+
+- **ai.md** - Ai documentation
+- **application.md** - Application documentation
+- **console.md** - Console documentation
+- **device.md** - Device documentation
+- **elements.md** - Elements documentation
+- **getting_started.md** - Getting Started documentation
+- **network.md** - Network documentation
+- **other.md** - Other documentation
+- **performance.md** - Performance documentation
+- **recorder.md** - Recorder documentation
+- **rendering.md** - Rendering documentation
+- **security.md** - Security documentation
+- **sources.md** - Sources documentation
+
+Use `view` to read specific reference files when detailed information is needed.
+
+## Working with This Skill
+
+### For Beginners
+Start with the getting_started or tutorials reference files for foundational concepts.
+
+### For Specific Features
+Use the appropriate category reference file (api, guides, etc.) for detailed information.
+
+### For Code Examples
+The quick reference section above contains common patterns extracted from the official docs.
+
+## Resources
+
+### references/
+Organized documentation extracted from official sources. These files contain:
+- Detailed explanations
+- Code examples with language annotations
+- Links to original documentation
+- Table of contents for quick navigation
+
+### scripts/
+Add helper scripts here for common automation tasks.
+
+### assets/
+Add templates, boilerplate, or example projects here.
+
+## Notes
+
+- This skill was automatically generated from official documentation
+- Reference files preserve the structure and examples from source docs
+- Code examples include language detection for better syntax highlighting
+- Quick reference patterns are extracted from common usage examples in the docs
+
+## Updating
+
+To refresh this skill with updated documentation:
+1. Re-run the scraper with the same configuration
+2. The skill will be rebuilt with the latest information

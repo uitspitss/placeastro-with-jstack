@@ -1,0 +1,770 @@
+import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getRequest } from "@tanstack/react-start/server";
+
+import {
+  addUserPreference,
+  getUserPreferences,
+  removeUserPreferenceByPreferenceId as removeUserPreferenceByPreferenceIdRepo,
+  schemas as preferenceSchemas,
+} from "@/lib/repositories/user-preferences";
+import { getDb, userPreferences } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import {
+  addUserPerson,
+  getUserPeople,
+  removeUserPerson,
+  schemas as peopleSchemas,
+} from "@/lib/repositories/user-people";
+import { auth } from "../auth";
+import {
+  getUserDislikes,
+  addUserDislike,
+  removeUserDislikeByPreferenceId,
+} from "../repositories/user-dislikes";
+import type { UserPreferences } from "@/lib/types/preferences";
+
+// Input validation schemas from repositories
+const AddMoviePreferenceInput = preferenceSchemas.addPreference.omit({
+  userId: true,
+});
+const AddPersonPreferenceInput = peopleSchemas.addPerson.omit({ userId: true });
+const RemovePreferenceInput = z.object({
+  id: z.number(),
+  type: z.enum(["movie", "tv-series"]),
+});
+const RemovePreferenceByPreferenceIdInput = z.object({
+  preferenceId: z.number(),
+});
+const RemovePersonInput = z.object({
+  id: z.number(),
+  personType: z.enum(["actor", "director", "other"]),
+});
+
+// Add movie/TV show to user preferences
+export const addMoviePreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(AddMoviePreferenceInput)
+  .handler(async ({ data }) => {
+    try {
+      const { preferenceId, title, year, category, genres, posterPath } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const result = await addUserPreference(db, {
+        userId: session.user.id,
+        preferenceId,
+        title,
+        year,
+        category,
+        genres,
+        posterPath,
+      });
+
+      if (result.success && result.preference) {
+        return { success: true, data: result.preference };
+      } else {
+        return { success: false, error: "Already in preferences" };
+      }
+    } catch (error) {
+      console.error("Error adding movie preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to add movie preference",
+      };
+    }
+  });
+
+// Remove movie/TV show from user preferences
+export const removeMoviePreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(RemovePreferenceInput)
+  .handler(async ({ data }) => {
+    try {
+      const db = getDb();
+      const { id, type } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      // First get the preference to find the TMDB ID
+      const preferenceToDelete = await db
+        .select()
+        .from(userPreferences)
+        .where(eq(userPreferences.id, id))
+        .limit(1);
+
+      if (preferenceToDelete.length === 0) {
+        return { success: false, error: "Preference not found" };
+      }
+
+      const preference = preferenceToDelete[0];
+
+      // Use repository function to remove by TMDB ID
+      const result = await removeUserPreferenceByPreferenceIdRepo(db, {
+        userId: session.user.id,
+        preferenceId: preference.preferenceId,
+      });
+
+      if (result.success && result.deletedPreference) {
+        return { success: true, data: result.deletedPreference };
+      } else {
+        return { success: false, error: "Failed to remove preference" };
+      }
+    } catch (error) {
+      console.error("Error removing movie preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to remove movie preference",
+      };
+    }
+  });
+
+// Add person (actor/director) to user people
+export const addPersonPreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(AddPersonPreferenceInput)
+  .handler(async ({ data }) => {
+    try {
+      const { personId, personName, personType, profilePath } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const result = await addUserPerson(db, {
+        userId: session.user.id,
+        personId,
+        personName,
+        personType,
+        profilePath,
+      });
+
+      if (result.success && result.person) {
+        return { success: true, data: result.person };
+      } else {
+        return { success: false, error: "Already in preferences" };
+      }
+    } catch (error) {
+      console.error("Error adding person preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to add person preference",
+      };
+    }
+  });
+
+// Remove person (actor/director) from user people
+export const removePersonPreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(RemovePersonInput)
+  .handler(async ({ data }) => {
+    try {
+      const { id, personType } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const result = await removeUserPerson(db, {
+        id,
+        userId: session.user.id,
+      });
+
+      if (result.success && result.deletedPerson) {
+        return { success: true, data: result.deletedPerson };
+      } else {
+        return { success: false, error: "Person not found" };
+      }
+    } catch (error) {
+      console.error("Error removing person preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to remove person preference",
+      };
+    }
+  });
+
+// Fetch all user preferences for the preferences page
+export const fetchUserPreferences = createServerFn({
+  method: "GET",
+}).handler(async (): Promise<UserPreferences> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: getRequest().headers,
+    });
+
+    if (!session?.user?.id) {
+      // Return empty UserPreferences if not authenticated
+      return {
+        movies: [],
+        tvShows: [],
+        people: [],
+        favoriteGenres: [],
+        minRating: 6,
+        preferredContent: {
+          movie: true,
+          tv: true,
+        },
+        notes: "",
+      };
+    }
+
+    // Fetch movie and TV preferences using repository
+    const db = getDb();
+    const movieTVResult = await getUserPreferences(db, {
+      userId: session.user.id,
+    });
+
+    // Fetch people preferences using repository
+    const peopleResult = await getUserPeople(db, {
+      userId: session.user.id,
+    });
+
+    const movieTVPreferences = movieTVResult.success
+      ? movieTVResult.preferences
+      : [];
+    const peoplePreferences = peopleResult.success ? peopleResult.people : [];
+
+    // Separate movies and TV shows
+    const movies = movieTVPreferences
+      .filter((pref) => pref.category === "movie")
+      .map((pref) => ({
+        id: pref.preferenceId, // Use TMDB ID for display/search comparison
+        dbId: pref.id, // Keep database ID for removal operations
+        title: pref.title,
+        category: "movie" as const,
+        genreIds: [],
+        genres: pref.genres
+          ? pref.genres
+              .split(",")
+              .map((g) => g.trim())
+              .filter(Boolean)
+          : [],
+        posterPath: pref.posterPath || "",
+        backdropPath: "",
+        overview: "",
+        voteAverage: 0,
+        releaseDate: pref.year?.toString() || "",
+        contentType: "movie" as const, // Add contentType to match ContentItem type
+      }));
+
+    const tvShows = movieTVPreferences
+      .filter((pref) => pref.category === "tv-series")
+      .map((pref) => ({
+        id: pref.preferenceId, // Use TMDB ID for display/search comparison
+        dbId: pref.id, // Keep database ID for removal operations
+        title: pref.title,
+        category: "tv" as const,
+        genreIds: [],
+        genres: pref.genres
+          ? pref.genres
+              .split(",")
+              .map((g) => g.trim())
+              .filter(Boolean)
+          : [],
+        posterPath: pref.posterPath || "",
+        backdropPath: "",
+        overview: "",
+        voteAverage: 0,
+        releaseDate: pref.year?.toString() || "",
+        contentType: "tv" as const, // Add contentType to match ContentItem type
+      }));
+
+    // Convert people preferences
+    const people = peoplePreferences.map((pref) => ({
+      id: pref.personId, // Use TMDB ID for display/search comparison
+      dbId: pref.id, // Keep database ID for removal operations
+      name: pref.personName,
+      profileImageUrl: pref.profilePath || "",
+      popularity: 0,
+      knownFor: [],
+      category: pref.personType,
+      contentType: "person" as const, // Add contentType to match ContentItem type
+    }));
+
+    // Return UserPreferences directly
+    return {
+      movies,
+      tvShows,
+      people,
+      favoriteGenres: [], // This would be stored separately in the future
+      minRating: 6,
+      preferredContent: {
+        movie: true,
+        tv: true,
+      },
+      notes: "",
+    };
+  } catch (error) {
+    console.error("Error fetching user preferences:", error);
+    // Return empty UserPreferences on error
+    return {
+      movies: [],
+      tvShows: [],
+      people: [],
+      favoriteGenres: [],
+      minRating: 6,
+      preferredContent: {
+        movie: true,
+        tv: true,
+      },
+      notes: "",
+    };
+  }
+});
+
+// Helper function to add content from FilmInfo
+export const addFilmInfoPreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({
+      filmInfo: z.object({
+        id: z.number(),
+        title: z.string(),
+        category: z.enum(["movie", "tv"]),
+        genres: z.array(z.string()),
+        releaseDate: z.string().optional(),
+      }),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      const { filmInfo } = data;
+      const category = filmInfo.category === "tv" ? "tv-series" : "movie";
+      const genres = filmInfo.genres.join(", ");
+      const year = filmInfo.releaseDate
+        ? new Date(filmInfo.releaseDate).getFullYear()
+        : new Date().getFullYear();
+
+      return await addMoviePreference({
+        data: {
+          preferenceId: filmInfo.id,
+          title: filmInfo.title,
+          year,
+          category,
+          genres: genres || undefined,
+        },
+      });
+    } catch (error) {
+      console.error("Error adding film info preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to add film info preference",
+      };
+    }
+  });
+
+// Helper function to add content from Person
+export const addPersonInfoPreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({
+      person: z.object({
+        id: z.number(),
+        name: z.string(),
+        knownForDepartment: z.string().optional(),
+        profilePath: z.string().optional(),
+      }),
+      personType: z.enum(["actor", "director", "other"]),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      const { person, personType } = data;
+
+      return await addPersonPreference({
+        data: {
+          personId: person.id,
+          personName: person.name,
+          personType,
+          profilePath: person.profilePath,
+        },
+      });
+    } catch (error) {
+      console.error("Error adding person info preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to add person info preference",
+      };
+    }
+  });
+
+// Add content to user dislikes
+export const addUserDislikeFn = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({
+      preferenceId: z.number(),
+      title: z.string(),
+      year: z.number(),
+      category: z.enum(["movie", "tv-series"]),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      const { preferenceId, title, year, category } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const result = await addUserDislike(db, {
+        userId: session.user.id,
+        preferenceId,
+        title,
+        year,
+        category,
+      });
+
+      if (result.success && result.dislike) {
+        return { success: true, data: result.dislike };
+      } else {
+        return { success: false, error: "Already in dislikes" };
+      }
+    } catch (error) {
+      console.error("Error adding user dislike:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error ? error.message : "Failed to add user dislike",
+      };
+    }
+  });
+
+// Remove content from user dislikes
+export const removeUserDislikeByPreferenceIdFn = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({
+      preferenceId: z.number(),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      const { preferenceId } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const result = await removeUserDislikeByPreferenceId(db, {
+        userId: session.user.id,
+        preferenceId,
+      });
+
+      if (result.success && result.deletedDislike) {
+        return { success: true, data: result.deletedDislike };
+      } else {
+        return { success: false, error: "Failed to remove from dislikes" };
+      }
+    } catch (error) {
+      console.error("Error removing user dislike:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to remove user dislike",
+      };
+    }
+  });
+
+// Remove movie/TV show from user preferences by preferenceId
+export const removeUserPreferenceByPreferenceId = createServerFn({
+  method: "POST",
+})
+  .inputValidator(RemovePreferenceByPreferenceIdInput)
+  .handler(async ({ data }) => {
+    try {
+      const db = getDb();
+      const { preferenceId } = data;
+
+      // Get the current session to retrieve authenticated user ID
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      // Use repository function to remove by preference ID
+      const result = await removeUserPreferenceByPreferenceIdRepo(db, {
+        userId: session.user.id,
+        preferenceId,
+      });
+
+      if (result.success && result.deletedPreference) {
+        return { success: true, data: result.deletedPreference };
+      } else {
+        return { success: false, error: "Failed to remove preference" };
+      }
+    } catch (error) {
+      console.error("Error removing movie preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to remove movie preference",
+      };
+    }
+  });
+
+// Get user's liked items (preferenceIds)
+export const getUserLikedItems = createServerFn({
+  method: "GET",
+}).handler(async (): Promise<{ likedIds: number[] }> => {
+  try {
+    const session = await auth.api.getSession({
+      headers: getRequest().headers,
+    });
+
+    if (!session?.user?.id) {
+      return { likedIds: [] };
+    }
+
+    const db = getDb();
+    const result = await getUserPreferences(db, {
+      userId: session.user.id,
+    });
+
+    if (result.success) {
+      const likedIds = result.preferences.map((p) => p.preferenceId);
+      return { likedIds };
+    }
+
+    return { likedIds: [] };
+  } catch {
+    return { likedIds: [] };
+  }
+});
+
+// Toggle movie/TV show preference (add if not liked, remove if liked)
+export const toggleMoviePreference = createServerFn({
+  method: "POST",
+})
+  .inputValidator(
+    z.object({
+      preferenceId: z.number(),
+      title: z.string(),
+      year: z.number(),
+      category: z.enum(["movie", "tv-series"]),
+      genres: z.array(z.string()).optional(),
+      posterPath: z.string().optional(),
+    })
+  )
+  .handler(async ({ data }) => {
+    try {
+      const session = await auth.api.getSession({
+        headers: getRequest().headers,
+      });
+
+      if (!session?.user?.id) {
+        return { success: false, error: "User not authenticated" };
+      }
+
+      const db = getDb();
+      const { preferenceId, title, year, category, genres, posterPath } = data;
+
+      // Check if already liked
+      const existingResult = await getUserPreferences(db, {
+        userId: session.user.id,
+      });
+
+      if (!existingResult.success) {
+        return { success: false, error: "Failed to check preferences" };
+      }
+
+      const existing = existingResult.preferences.find(
+        (p) => p.preferenceId === preferenceId
+      );
+
+      if (existing) {
+        // Remove from preferences
+        const result = await removeUserPreferenceByPreferenceIdRepo(db, {
+          userId: session.user.id,
+          preferenceId,
+        });
+        return {
+          success: result.success,
+          action: "removed" as const,
+        };
+      } else {
+        // Add to preferences
+        const genresString = genres?.join(", ");
+        const result = await addUserPreference(db, {
+          userId: session.user.id,
+          preferenceId,
+          title,
+          year,
+          category,
+          genres: genresString,
+          posterPath,
+        });
+        return {
+          success: result.success,
+          action: "added" as const,
+        };
+      }
+    } catch (error) {
+      console.error("Error toggling movie preference:", error);
+      return {
+        success: false,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to toggle preference",
+      };
+    }
+  });
+
+export const getAllUserContent = createServerFn().handler(async () => {
+  // Get the current session to retrieve authenticated user ID
+  const session = await auth.api.getSession({
+    headers: getRequest().headers,
+  });
+
+  // If no session, return empty preferences
+  if (!session?.user?.id) {
+    return null;
+  }
+
+  const userId = session.user.id;
+
+  try {
+    const db = getDb();
+    const [preferencesResponse, peopleResponse, dislikesResponse] =
+      await Promise.all([
+        getUserPreferences(db, { userId }),
+        getUserPeople(db, { userId }),
+        getUserDislikes(db, { userId }),
+      ]);
+
+    const preferences = preferencesResponse.success
+      ? preferencesResponse.preferences
+      : [];
+    const people = peopleResponse.success ? peopleResponse.people : [];
+    const dislikes = dislikesResponse.success ? dislikesResponse.dislikes : [];
+
+    // Extract genres from preferences
+    const allGenres = preferences
+      .filter((p) => p.genres)
+      .map((p) => p.genres!.split(",").map((genre) => genre.trim()))
+      .flat()
+      .filter((genre) => genre.length > 0);
+
+    // Remove duplicates
+    const uniqueGenres = [...new Set(allGenres)];
+
+    return {
+      movies: preferences
+        .filter((p) => p.category === "movie")
+        .map((p) => ({
+          title: p.title,
+          year: p.year,
+        })),
+      tvs: preferences
+        .filter((p) => p.category === "tv-series")
+        .map((p) => ({
+          title: p.title,
+          year: p.year,
+        })),
+      dislikedMovies: dislikes
+        .filter((d) => d.category === "movie")
+        .map((d) => ({
+          title: d.title,
+          year: d.year,
+        })),
+      dislikedTvs: dislikes
+        .filter((d) => d.category === "tv-series")
+        .map((d) => ({
+          title: d.title,
+          year: d.year,
+        })),
+      actors: people
+        .filter((p) => p.personType === "actor")
+        .map((p) => p.personName),
+      directors: people
+        .filter((p) => p.personType === "director")
+        .map((p) => p.personName),
+      genres: uniqueGenres,
+    };
+  } catch (error) {
+    console.error("Failed to load user preferences:", error);
+    return {
+      movies: [],
+      tvs: [],
+      dislikedMovies: [],
+      dislikedTvs: [],
+      actors: [],
+      directors: [],
+      genres: [],
+    };
+  }
+});

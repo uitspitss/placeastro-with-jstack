@@ -1,5 +1,5 @@
-import { Hono } from 'hono';
 import { drizzle } from 'drizzle-orm/d1';
+import { Hono } from 'hono';
 import type { HonoEnv } from '../orpc';
 import {
   getPlaceImageByKey,
@@ -66,7 +66,10 @@ imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
   }
 
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  const placeImage = await getPlaceImageByKey(
+    db,
+    `${upper}/${catalogueNumber}`,
+  );
   if (!placeImage) {
     return c.text('Not found image', 404);
   }
@@ -94,7 +97,10 @@ imageRoutes.get('/:catalogue/:catalogueNumber', async (c) => {
   }
 
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  const placeImage = await getPlaceImageByKey(
+    db,
+    `${upper}/${catalogueNumber}`,
+  );
   if (!placeImage) {
     return c.text('Not found image', 404);
   }

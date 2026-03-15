@@ -17,7 +17,7 @@ const queryClient = new QueryClient({
   }),
 });
 
-const rootElement = document.getElementById('root')!;
+const rootElement = document.getElementById('root') as HTMLElement;
 createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>

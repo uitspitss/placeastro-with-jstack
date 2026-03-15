@@ -3,10 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@10.7.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev": "turbo dev",
     "dev:stream": "turbo dev --ui=stream",
@@ -17,11 +14,13 @@
     "build:web": "pnpm --filter @placeastro/web build",
     "deploy:api": "pnpm --filter @placeastro/api deploy",
     "lint": "biome lint .",
-    "format": "biome format .",
+    "format": "biome format --write .",
     "check": "biome check .",
+    "test": "turbo run test",
     "clean": "pnpm run --recursive clean && rm -rf .turbo",
     "clean:all": "pnpm clean && rm -rf node_modules pnpm-lock.yaml",
     "typecheck": "turbo typecheck",
+    "knip": "pnpx knip",
     "types:generate": "pnpm --filter @placeastro/api wrangler:types",
     "db:generate": "pnpm --filter @placeastro/database generate",
     "db:migrate": "pnpm --filter @placeastro/database migrate",
@@ -41,11 +40,14 @@
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "drizzle-kit": "^0.30.4",
+    "knip": "^5.86.0",
+    "lefthook": "^2.1.4",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8",
     "tailwindcss": "^4.0.0",
     "turbo": "^2.8.14",
     "typescript": "^5",
+    "vitest": "^4.1.0",
     "wrangler": "^4.71.0"
   }
 }

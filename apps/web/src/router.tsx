@@ -1,3 +1,7 @@
+import { getSession } from '@/lib/auth-client';
+import LandingPage from '@/routes/index';
+import LoginPage from '@/routes/login';
+import UploadPage from '@/routes/upload';
 import {
   Outlet,
   createRootRoute,
@@ -5,10 +9,6 @@ import {
   createRouter,
   redirect,
 } from '@tanstack/react-router';
-import { getSession } from '@/lib/auth-client';
-import LandingPage from '@/routes/index';
-import LoginPage from '@/routes/login';
-import UploadPage from '@/routes/upload';
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
