@@ -1,4 +1,3 @@
-import { AspectRatio } from '@placeastro/ui';
 import {
   Carousel,
   CarouselContent,
@@ -28,14 +27,12 @@ export function Gallery({ imageUrls }: Props) {
     >
       <CarouselContent>
         {imageUrls.map((imageUrl) => (
-          <CarouselItem key={imageUrl} className="relative">
-            <AspectRatio ratio={1 / 1}>
-              <img
-                src={imageUrl}
-                alt="placeholder image"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </AspectRatio>
+          <CarouselItem key={imageUrl}>
+            <img
+              src={imageUrl}
+              alt="placeholder image"
+              className="w-full aspect-square object-cover"
+            />
           </CarouselItem>
         ))}
       </CarouselContent>
