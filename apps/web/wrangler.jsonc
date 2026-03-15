@@ -21,7 +21,7 @@
     "production": {
       "routes": [
         {
-          "pattern": "placeastro.u7s.dev/docs/*",
+          "pattern": "placeastro.u7s.dev/docs*",
           "zone_name": "u7s.dev"
         }
       ]
