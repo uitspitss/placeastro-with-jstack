@@ -1,9 +1,9 @@
-import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
-export default defineConfig(({ mode }) => ({
-  base: mode === 'production' ? '/docs/' : '/',
+export default defineConfig({
+  base: '/docs/',
   plugins: [react()],
   resolve: {
     alias: {
@@ -23,4 +23,4 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist',
     sourcemap: true,
   },
-}));
+});
