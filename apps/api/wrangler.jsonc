@@ -17,7 +17,9 @@
     "CORS_ORIGIN": "http://localhost:3000",
     "BETTER_AUTH_URL": "http://localhost:3000",
     "IMGIX_HOSTNAME": "placeastro-dev.imgix.net",
-    "R2_BUCKET": "placeastro-dev"
+    "R2_BUCKET": "placeastro-dev",
+    "UMAMI_HOST": "https://cloud.umami.is",
+    "UMAMI_WEBSITE_ID": "0b51e2f3-638d-4b87-82a3-30c6c317927e"
   },
   "d1_databases": [
     {
@@ -43,7 +45,9 @@
         "CORS_ORIGIN": "https://placeastro.u7s.dev",
         "BETTER_AUTH_URL": "https://placeastro.u7s.dev",
         "IMGIX_HOSTNAME": "placeastro-r2.imgix.net",
-        "R2_BUCKET": "placeastro"
+        "R2_BUCKET": "placeastro",
+        "UMAMI_HOST": "https://cloud.umami.is",
+        "UMAMI_WEBSITE_ID": "0b51e2f3-638d-4b87-82a3-30c6c317927e"
       },
       "routes": [
         {
