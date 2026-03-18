@@ -10,12 +10,12 @@
 ## 開発サーバー
 
 - `nr dev` で全アプリを同時起動
-- Claude Code から実行する場合は `pnpm turbo run dev --ui=stream` を使う
+- Claude Code から実行する場合は `nlx turbo run dev --ui=stream` を使う
 
 ## モノレポ構成
 
 - `apps/web` - Vite + React フロントエンド
-- `apps/api` - Hono + oRPC API サーバー (Cloudflare Workers)
+- `apps/api` - Hono + oRPC + Drizzle API サーバー (Cloudflare Workers)
 - `packages/database` - Drizzle ORM + D1 スキーマ・マイグレーション
 - `packages/shared` - 共有型・ユーティリティ (Zod スキーマ)
 - `packages/ui` - 共有 UI コンポーネント (shadcn/ui パターン)
@@ -33,6 +33,7 @@
 - `services/` → ビジネスロジック・DB クエリ
 - `schema/` → Zod スキーマ（入出力バリデーション）
 - `lib/` → 共通ユーティリティ（auth, db, s3）
+- DI は関数引数で行う（DI コンテナは使わない）
 
 ## テスト
 

@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm biome check .
-      - run: pnpm turbo run typecheck
-      - run: pnpm turbo run test
-      - run: pnpm turbo run build
-      - run: pnpm knip
+      - run: nci
+      - run: nr lint
+      - run: nr typecheck
+      - run: nr test
+      - run: nr build
+      - run: nr knip

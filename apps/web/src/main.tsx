@@ -9,6 +9,12 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './globals.css';
 
+if (import.meta.env.DEV) {
+  import('react-scan').then(({ scan }) => {
+    scan({ enabled: true });
+  });
+}
+
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (err) => {
