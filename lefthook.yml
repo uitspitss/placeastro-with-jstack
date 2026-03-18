@@ -3,7 +3,7 @@ pre-commit:
     encrypt-env:
       glob: ".env*"
       exclude: ".env.keys"
-      run: nlx dotenvx encrypt
+      run: nlx @dotenvx/dotenvx encrypt
       stage_fixed: true
     lint:
       glob: "*.{ts,tsx,js,jsx,json}"
