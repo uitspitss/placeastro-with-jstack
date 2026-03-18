@@ -241,6 +241,9 @@ importers:
       vitest:
         specifier: ^4.1.0
         version: 4.1.0(@types/node@22.13.5)(happy-dom@20.8.4)(vite@6.4.1(@types/node@22.13.5)(jiti@2.6.1)(lightningcss@1.29.1)(tsx@4.21.0)(yaml@2.8.2))
+      wrangler:
+        specifier: ^4.71.0
+        version: 4.71.0(@cloudflare/workers-types@4.20250214.0)
 
   packages/database:
     dependencies:
