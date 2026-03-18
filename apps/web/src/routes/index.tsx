@@ -1,10 +1,15 @@
+import { Gallery } from '@/components/gallery';
+import { createFileRoute } from '@tanstack/react-router';
 import { Clipboard } from 'lucide-react';
 import { useState } from 'react';
-import { Gallery } from '../components/gallery';
 
 const API_URL = import.meta.env.VITE_API_URL ?? '';
 
-export default function Landing() {
+export const Route = createFileRoute('/')({
+  component: Landing,
+});
+
+function Landing() {
   const [copied, setCopied] = useState<number | null>(null);
 
   const codeSnippets = [
