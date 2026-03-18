@@ -1,5 +1,2 @@
-# Install dependencies when creating worktrees
-post-create = "ni"
-
-# Run tests before merging
-pre-merge = "nr test"
+[hooks.post_create]
+run = ["ni"]

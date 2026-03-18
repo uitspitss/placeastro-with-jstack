@@ -9,9 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo run typecheck
-      - run: pnpm turbo run test
+      - run: nci
+      - run: nr typecheck
+      - run: nr test
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -24,8 +24,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo run build --filter=@placeastro/web
+      - run: nci
+      - run: nlx turbo run build --filter=@placeastro/web
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
