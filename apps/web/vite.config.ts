@@ -1,10 +1,18 @@
 import { resolve } from 'node:path';
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
   base: '/docs/',
-  plugins: [react()],
+  plugins: [
+    TanStackRouterVite(),
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler']],
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

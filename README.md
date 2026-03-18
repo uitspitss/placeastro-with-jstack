@@ -1,84 +1,81 @@
-# PlaceAstro Monorepo 🚀
+# PlaceAstro Monorepo
 
-Cloudflare Workers + Next.js を使用したモダンなフルスタックアプリケーション
+Cloudflare Workers + Vite React を使用した天体写真共有プラットフォーム
 
-## ✅ セットアップ完了
+## Tech Stack
 
-- **API**: <http://localhost:8080> で動作中 (Cloudflare Workers)
-- **Web**: <http://localhost:3000> で動作中 (Next.js)
-- **データベース**: D1 ローカル環境が動作中
-- **Docker不要**: pnpmだけで完全な開発環境
-
-## 🎆 技術スタック
-
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS
-- **Backend**: Cloudflare Workers, Hono, JStack
-- **Database**: Cloudflare D1, Drizzle ORM
+- **Frontend**: Vite, React 19, TanStack Router, TanStack Query, Tailwind CSS v4
+- **Backend**: Cloudflare Workers, Hono, oRPC, Drizzle ORM
+- **Database**: Cloudflare D1 (SQLite)
 - **Storage**: Cloudflare R2
 - **Authentication**: Better Auth
-- **Monorepo**: pnpm workspaces
+- **Monorepo**: pnpm workspaces + Turborepo
+- **Tooling**: Biome, lefthook, knip, Vitest
 
-## 📦 プロジェクト構造
+## Getting Started
 
-```text
+```bash
+# ランタイムのインストール
+mise install
+
+# 依存関係のインストール
+ni
+
+# ローカル DB のマイグレーション
+nr db:migrate
+
+# 開発サーバーの起動（API + Web 同時起動）
+nr dev
+```
+
+## Available Scripts
+
+| コマンド | 説明 |
+|---|---|
+| `nr dev` | 全アプリの開発サーバーを起動 |
+| `nr build` | 全パッケージをビルド |
+| `nr lint` | 全パッケージの Biome チェック |
+| `nr typecheck` | 全パッケージの型チェック |
+| `nr test` | 全パッケージのテスト実行 |
+| `nr format` | Biome でフォーマット |
+| `nr knip` | 未使用コード・依存関係の検出 |
+| `nr db:generate` | マイグレーション生成 |
+| `nr db:migrate` | ローカル DB にマイグレーション適用 |
+| `nr db:studio` | Drizzle Studio を起動 |
+
+## Project Structure
+
+```
 ├── apps/
-│   ├── api/          # Cloudflare Workers API
-│   └── web/          # Next.js フロントエンド
+│   ├── api/                 # Hono API サーバー (Cloudflare Workers)
+│   │   ├── src/
+│   │   │   ├── lib/         # 共通ユーティリティ (auth, db, s3)
+│   │   │   ├── routers/     # oRPC ルーター定義
+│   │   │   ├── routes/      # HTTP ルート (画像プロキシ等)
+│   │   │   ├── schema/      # Zod スキーマ
+│   │   │   ├── services/    # ビジネスロジック
+│   │   │   └── index.ts
+│   │   ├── vitest.config.ts
+│   │   └── wrangler.jsonc
+│   └── web/                 # React フロントエンド (Vite)
+│       ├── src/
+│       │   ├── components/
+│       │   ├── lib/
+│       │   ├── routes/
+│       │   └── main.tsx
+│       ├── vite.config.ts
+│       └── index.html
 ├── packages/
-│   ├── database/     # Drizzle ORM + スキーマ
-│   ├── shared/       # 共有型定義
-│   └── ui/          # 共有UIコンポーネント
-└── scripts/         # セットアップスクリプト
-```
-
-## 🚀 クイックスタート
-
-### 自動セットアップ (推奨)
-
-```bash
-# セットアップスクリプトを実行
-bash scripts/setup.sh
-
-# または手動で
-pnpm install
-pnpm setup  # 型生成とDB初期化
-```
-
-### 開発サーバー起動
-
-```bash
-# 両方のサービスを同時起動 (推奨)
-pnpm dev
-
-# 個別起動
-pnpm dev:api  # APIのみ (http://localhost:8080)
-pnpm dev:web  # Webのみ (http://localhost:3000)
-```
-
-## 📋 利用可能なコマンド
-
-```bash
-# 🚀 開発 (Turbo統一)
-pnpm dev              # 全サービス起動 (Turbo stream表示)
-pnpm dev:api          # API のみ (Cloudflare Workers)
-pnpm dev:web          # Web のみ (Next.js)
-
-# 📦 ビルド & デプロイ
-pnpm build            # 全体ビルド (Turboキャッシュ付き)
-pnpm build:api        # API ビルド
-pnpm build:web        # Web ビルド
-pnpm deploy:api       # Cloudflare へデプロイ
-
-# 🗺️ データベース
-pnpm db:init:local    # ローカルDB初期化
-pnpm db:generate      # マイグレーション生成
-pnpm db:migrate       # マイグレーション実行
-pnpm db:studio        # Drizzle Studio起動
-
-# 🔧 ユーティリティ
-pnpm typecheck        # TypeScript型チェック
-pnpm check            # Biome (Lint & Format)
-pnpm clean            # ビルド成果物削除
-pnpm clean:all        # 完全クリーンアップ
-pnpm setup            # 初期セットアップ
+│   ├── database/            # Drizzle ORM スキーマ・マイグレーション
+│   │   ├── src/
+│   │   └── drizzle/
+│   ├── shared/              # 共有型・ユーティリティ
+│   │   └── src/
+│   └── ui/                  # 共有 UI コンポーネント
+│       └── src/
+├── turbo.json
+├── biome.json
+├── lefthook.yml
+├── knip.json
+└── pnpm-workspace.yaml
 ```
