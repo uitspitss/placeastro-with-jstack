@@ -1,5 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
+import type { Context } from 'hono';
 import { Hono } from 'hono';
+import { trackPageview } from '../lib/umami';
 import type { HonoEnv } from '../orpc';
 import {
   getPlaceImageByKey,
@@ -25,8 +27,24 @@ function buildImgixParams(
 
 export const imageRoutes = new Hono<HonoEnv>();
 
+// biome-ignore lint/suspicious/noExplicitAny: Hono Context generic variance
+function sendTracking(c: Context<HonoEnv, any>, url: string) {
+  c.executionCtx.waitUntil(
+    trackPageview({
+      host: c.env.UMAMI_HOST,
+      websiteId: c.env.UMAMI_WEBSITE_ID,
+      url,
+      hostname: new URL(c.req.raw.url).hostname,
+      userAgent: c.req.raw.headers.get('User-Agent') ?? undefined,
+      language:
+        c.req.raw.headers.get('Accept-Language')?.split(',')[0] ?? undefined,
+    }),
+  );
+}
+
 // GET /random — must be registered before /:catalogue/:catalogueNumber
 imageRoutes.get('/random', async (c) => {
+  sendTracking(c, '/random');
   const w = c.req.query('w') ?? '400';
   const h = c.req.query('h') ?? '400';
 
@@ -59,6 +77,7 @@ imageRoutes.get('/random', async (c) => {
 // GET /:catalogue/:catalogueNumber/info
 imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
   const { catalogue, catalogueNumber } = c.req.param();
+  sendTracking(c, `/${catalogue}/${catalogueNumber}/info`);
   const upper = catalogue.toUpperCase();
 
   if (upper !== 'M' && upper !== 'NGC') {
@@ -88,6 +107,7 @@ imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
 // GET /:catalogue/:catalogueNumber — proxy image from imgix
 imageRoutes.get('/:catalogue/:catalogueNumber', async (c) => {
   const { catalogue, catalogueNumber } = c.req.param();
+  sendTracking(c, `/${catalogue}/${catalogueNumber}`);
   const w = c.req.query('w') ?? '400';
   const h = c.req.query('h') ?? '400';
 
