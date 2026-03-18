@@ -1,6 +1,6 @@
 /// <reference path="./types/worker-configuration.d.ts" />
 
-import { ORPCError, os } from '@orpc/server';
+import { os, ORPCError } from '@orpc/server';
 import { drizzle } from 'drizzle-orm/d1';
 import { createAuth } from './lib/auth';
 

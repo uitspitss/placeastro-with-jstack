@@ -1,8 +1,12 @@
 import { signIn, signOut, useSession } from '@/lib/auth-client';
-import { useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useState } from 'react';
 
-const LoginPage = () => {
+export const Route = createFileRoute('/login')({
+  component: LoginPage,
+});
+
+function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -147,6 +151,4 @@ const LoginPage = () => {
       )}
     </div>
   );
-};
-
-export default LoginPage;
+}

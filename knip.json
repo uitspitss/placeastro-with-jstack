@@ -1,0 +1,29 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "ignore": [".claude/**"],
+  "rules": {
+    "devDependencies": "warn",
+    "exports": "warn"
+  },
+  "workspaces": {
+    "apps/web": {
+      "project": ["src/**/*.{ts,tsx}"],
+      "ignoreDependencies": [
+        "tailwindcss",
+        "tw-animate-css"
+      ]
+    },
+    "apps/api": {
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/shared": {
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/database": {
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/ui": {
+      "project": ["src/**/*.{ts,tsx}"]
+    }
+  }
+}

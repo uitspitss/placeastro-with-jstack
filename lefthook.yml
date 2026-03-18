@@ -1,0 +1,13 @@
+pre-commit:
+  commands:
+    encrypt-env:
+      glob: ".env*"
+      exclude: ".env.keys"
+      run: nlx @dotenvx/dotenvx encrypt
+      stage_fixed: true
+    lint:
+      glob: "*.{ts,tsx,js,jsx,json}"
+      run: nlx biome check --write {staged_files}
+      stage_fixed: true
+    typecheck:
+      run: nr typecheck

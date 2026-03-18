@@ -5,8 +5,8 @@ import '@uppy/core/dist/style.min.css';
 import '@uppy/dashboard/dist/style.min.css';
 import { client } from '@/lib/client';
 import { createMutationKey, createQueryKey } from '@/lib/query-key';
-import { createPlaceImageSchema } from '@placeastro/shared';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { createPlaceImageSchema } from '@placeastro/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -41,8 +41,9 @@ export function PlaceImageUploadForm() {
     mutationFn: async (data: SchemaType) => {
       const key = `${data.catalogue}/${crypto.randomUUID()}`;
 
-      const { uploadUrl, imgixUrl } =
-        await client.placeImages.getUploadUrl({ key });
+      const { uploadUrl, imgixUrl } = await client.placeImages.getUploadUrl({
+        key,
+      });
 
       const resUpload = await fetch(uploadUrl, {
         method: 'PUT',

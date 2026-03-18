@@ -76,16 +76,12 @@
       "indexes": {
         "catalogue_idx": {
           "name": "catalogue_idx",
-          "columns": [
-            "catalogue"
-          ],
+          "columns": ["catalogue"],
           "isUnique": false
         },
         "catalogue_number_idx": {
           "name": "catalogue_number_idx",
-          "columns": [
-            "catalogue_number"
-          ],
+          "columns": ["catalogue_number"],
           "isUnique": false
         }
       },
