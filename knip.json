@@ -1,15 +1,18 @@
 {
   "$schema": "https://unpkg.com/knip@latest/schema.json",
   "ignore": [".claude/**"],
+  "ignoreBinaries": ["portless", "wrangler"],
   "rules": {
+    "files": "warn",
+    "dependencies": "warn",
     "devDependencies": "warn",
-    "exports": "warn"
+    "exports": "warn",
+    "types": "warn"
   },
   "workspaces": {
     "apps/web": {
       "project": ["src/**/*.{ts,tsx}"],
       "ignoreDependencies": [
-        "babel-plugin-react-compiler",
         "tailwindcss",
         "tw-animate-css"
       ]
