@@ -8,6 +8,7 @@ import { createMutationKey, createQueryKey } from '@/lib/query-key';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createPlaceImageSchema } from '@placeastro/shared';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Upload } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -97,63 +98,112 @@ export function PlaceImageUploadForm() {
   }, [files, form.setValue]);
 
   return (
-    <div className="w-full max-w-xs mx-auto">
+    <div className="code-card rounded-xl p-6">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-4"
       >
-        <select
-          className="w-full rounded-full px-4 py-2 text-black bg-white"
-          {...form.register('catalogue')}
-        >
-          <option value="">Catalogue</option>
-          <option value="M">M</option>
-          <option value="NGC">NGC</option>
-        </select>
-        {form.formState.errors.catalogue?.message && (
-          <p className="text-red-500">
-            {form.formState.errors.catalogue?.message}
-          </p>
-        )}
-        <input
-          type="text"
-          placeholder="Catalogue Number"
-          className="w-full rounded-full px-4 py-2 text-black bg-white"
-          inputMode="numeric"
-          {...form.register('catalogueNumber')}
-        />
-        {form.formState.errors.catalogueNumber?.message && (
-          <p className="text-red-500">
-            {form.formState.errors.catalogueNumber.message}
-          </p>
-        )}
-        <input
-          type="text"
-          placeholder="Credits"
-          className="w-full rounded-full px-4 py-2 text-black bg-white"
-          {...form.register('credits')}
-        />
-        {form.formState.errors.credits?.message && (
-          <p className="text-red-500">
-            {form.formState.errors.credits.message}
-          </p>
-        )}
-        <input
-          type="text"
-          placeholder="Source URL"
-          className="w-full rounded-full px-4 py-2 text-black bg-white"
-          {...form.register('sourceUrl')}
-        />
-        <p className="text-red-500">
-          {form.formState.errors.sourceUrl?.message}
-        </p>
-        <Dashboard uppy={uppy} />
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="catalogue"
+            className="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
+            Catalogue
+          </label>
+          <select
+            id="catalogue"
+            className="w-full rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm transition-colors focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25"
+            {...form.register('catalogue')}
+          >
+            <option value="">Select catalogue</option>
+            <option value="M">Messier (M)</option>
+            <option value="NGC">NGC</option>
+          </select>
+          {form.formState.errors.catalogue?.message && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.catalogue?.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="catalogueNumber"
+            className="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
+            Number
+          </label>
+          <input
+            type="text"
+            id="catalogueNumber"
+            placeholder="e.g. 42"
+            className="w-full rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm transition-colors placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25"
+            inputMode="numeric"
+            {...form.register('catalogueNumber')}
+          />
+          {form.formState.errors.catalogueNumber?.message && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.catalogueNumber.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="credits"
+            className="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
+            Credits
+          </label>
+          <input
+            type="text"
+            id="credits"
+            placeholder="Photographer name"
+            className="w-full rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm transition-colors placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25"
+            {...form.register('credits')}
+          />
+          {form.formState.errors.credits?.message && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.credits.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="sourceUrl"
+            className="text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          >
+            Source URL
+          </label>
+          <input
+            type="text"
+            id="sourceUrl"
+            placeholder="https://..."
+            className="w-full rounded-lg border border-border bg-secondary px-4 py-2.5 text-sm transition-colors placeholder:text-muted-foreground/50 focus:border-primary/50 focus:outline-none focus:ring-1 focus:ring-primary/25"
+            {...form.register('sourceUrl')}
+          />
+          {form.formState.errors.sourceUrl?.message && (
+            <p className="text-xs text-destructive">
+              {form.formState.errors.sourceUrl.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Image
+          </span>
+          <Dashboard uppy={uppy} height={200} />
+        </div>
+
         <button
           type="submit"
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
           disabled={mutation.isPending}
         >
-          {mutation.isPending ? 'Submitting...' : 'Submit'}
+          <Upload className="h-3.5 w-3.5" />
+          {mutation.isPending ? 'Uploading...' : 'Upload image'}
         </button>
       </form>
     </div>

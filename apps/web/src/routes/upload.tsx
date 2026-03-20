@@ -15,11 +15,27 @@ export const Route = createFileRoute('/upload')({
 
 function UploadPage() {
   return (
-    <div className="gap-8">
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-        <PlaceImageUploadForm />
+    <div className="mx-auto max-w-5xl px-6 py-12">
+      <div className="mb-10 flex flex-col gap-2">
+        <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold italic tracking-tight">
+          Upload
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Add new astrophotography images to the catalog
+        </p>
       </div>
-      <PlaceImageList />
+
+      <div className="grid gap-12 lg:grid-cols-[360px_1fr]">
+        <div>
+          <PlaceImageUploadForm />
+        </div>
+        <div>
+          <h2 className="mb-4 text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Catalog
+          </h2>
+          <PlaceImageList />
+        </div>
+      </div>
     </div>
   );
 }
