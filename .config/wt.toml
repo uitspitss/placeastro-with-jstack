@@ -1,2 +1,4 @@
-[hooks.post_create]
-run = ["mise trust", "ni", "bash scripts/setup-portless-env.sh"]
+[post-create]
+trust = "mise trust"
+install = "ni"
+portless = "bash scripts/setup-portless-env.sh"

@@ -121,7 +121,7 @@ export function PlaceImageUploadForm() {
           </select>
           {form.formState.errors.catalogue?.message && (
             <p className="text-xs text-destructive">
-              {form.formState.errors.catalogue?.message}
+              {String(form.formState.errors.catalogue?.message)}
             </p>
           )}
         </div>
@@ -143,7 +143,7 @@ export function PlaceImageUploadForm() {
           />
           {form.formState.errors.catalogueNumber?.message && (
             <p className="text-xs text-destructive">
-              {form.formState.errors.catalogueNumber.message}
+              {String(form.formState.errors.catalogueNumber.message)}
             </p>
           )}
         </div>
@@ -164,7 +164,7 @@ export function PlaceImageUploadForm() {
           />
           {form.formState.errors.credits?.message && (
             <p className="text-xs text-destructive">
-              {form.formState.errors.credits.message}
+              {String(form.formState.errors.credits.message)}
             </p>
           )}
         </div>
@@ -185,7 +185,7 @@ export function PlaceImageUploadForm() {
           />
           {form.formState.errors.sourceUrl?.message && (
             <p className="text-xs text-destructive">
-              {form.formState.errors.sourceUrl.message}
+              {String(form.formState.errors.sourceUrl.message)}
             </p>
           )}
         </div>
