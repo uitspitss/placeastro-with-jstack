@@ -5,9 +5,8 @@
   "compatibility_flags": ["nodejs_compat"],
   "main": "src/index.ts",
 
-  // Dev settings
+  // Dev settings (port は portless の PORT 環境変数で自動割当。固定する場合は "port": 8080 を追加)
   "dev": {
-    "port": 8080,
     "local_protocol": "http",
     "upstream_protocol": "https"
   },
