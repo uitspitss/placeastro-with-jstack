@@ -3,11 +3,8 @@
   "ignore": [".claude/**"],
   "ignoreBinaries": ["portless", "wrangler"],
   "rules": {
-    "files": "warn",
-    "dependencies": "warn",
     "devDependencies": "warn",
-    "exports": "warn",
-    "types": "warn"
+    "exports": "warn"
   },
   "workspaces": {
     "apps/web": {

@@ -26,8 +26,7 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
-    "drizzle-orm": "catalog:",
-    "zod": "catalog:"
+    "drizzle-orm": "catalog:"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.12",
