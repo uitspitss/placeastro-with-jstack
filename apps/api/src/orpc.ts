@@ -4,7 +4,7 @@ import { os, ORPCError } from '@orpc/server';
 import { drizzle } from 'drizzle-orm/d1';
 import { createAuth } from './lib/auth';
 
-export type InitialContext = {
+type InitialContext = {
   env: Cloudflare.Env;
   request: Request;
 };

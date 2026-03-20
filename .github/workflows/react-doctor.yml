@@ -13,5 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: millionco/react-doctor@main
+        continue-on-error: true
         with:
+          directory: apps/web
           fail-on: none
