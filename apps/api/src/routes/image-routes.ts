@@ -107,12 +107,14 @@ imageRoutes.get('/random', edgeCache, async (c) => {
       return ResultAsync.fromSafePromise<Response, PlaceImageError>(
         fetch(`${placeImage.url}?${imgixParams.toString()}`),
       ).andThen((res) => {
-        const contentType = res.headers.get('Content-Type');
+        const contentType = res.ok ? res.headers.get('Content-Type') : null;
         return contentType
           ? ok({ res, contentType })
           : err<never, PlaceImageError>({
               type: 'NOT_FOUND',
-              message: 'Not found content type',
+              message: res.ok
+                ? 'Not found content type'
+                : `Upstream error: ${res.status}`,
             });
       });
     })
@@ -162,12 +164,14 @@ imageRoutes.get('/:catalogue/:catalogueNumber', edgeCache, async (c) => {
       return ResultAsync.fromSafePromise<Response, PlaceImageError>(
         fetch(`${placeImage.url}?${imgixParams.toString()}`),
       ).andThen((res) => {
-        const contentType = res.headers.get('Content-Type');
+        const contentType = res.ok ? res.headers.get('Content-Type') : null;
         return contentType
           ? ok({ res, contentType })
           : err<never, PlaceImageError>({
               type: 'NOT_FOUND',
-              message: 'Not found content type',
+              message: res.ok
+                ? 'Not found content type'
+                : `Upstream error: ${res.status}`,
             });
       });
     })
