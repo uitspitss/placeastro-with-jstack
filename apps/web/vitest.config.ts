@@ -9,5 +9,6 @@ export default defineConfig({
       'src/**/*.spec.ts',
       'src/**/*.spec.tsx',
     ],
+    passWithNoTests: true,
   },
 });

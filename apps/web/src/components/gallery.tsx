@@ -23,8 +23,14 @@ export function Gallery({ imageUrls }: Props) {
     >
       <CarouselContent>
         {imageUrls.map((imageUrl) => (
-          <CarouselItem key={imageUrl} className="aspect-square">
-            <img src={imageUrl} alt="" className="w-full h-full object-cover" />
+          <CarouselItem key={imageUrl}>
+            <div className="overflow-hidden rounded-xl border border-border/50">
+              <img
+                src={imageUrl}
+                alt=""
+                className="aspect-square w-full object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
           </CarouselItem>
         ))}
       </CarouselContent>
