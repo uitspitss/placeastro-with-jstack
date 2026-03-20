@@ -80,18 +80,13 @@ imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
   sendTracking(c, `/${catalogue}/${catalogueNumber}/info`);
   const upper = catalogue.toUpperCase();
 
-  if (upper !== 'M' && upper !== 'NGC') {
-    return c.text('Not found catalogue', 404);
-  }
-
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(
-    db,
-    `${upper}/${catalogueNumber}`,
-  );
-  if (!placeImage) {
-    return c.text('Not found image', 404);
+  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  if (result.isErr()) {
+    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
+    return c.text(result.error.message, status);
   }
+  const placeImage = result.value;
 
   return c.json(
     {
@@ -112,18 +107,14 @@ imageRoutes.get('/:catalogue/:catalogueNumber', async (c) => {
   const h = c.req.query('h') ?? '400';
 
   const upper = catalogue.toUpperCase();
-  if (upper !== 'M' && upper !== 'NGC') {
-    return c.text('Not found catalogue', 404);
-  }
 
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(
-    db,
-    `${upper}/${catalogueNumber}`,
-  );
-  if (!placeImage) {
-    return c.text('Not found image', 404);
+  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  if (result.isErr()) {
+    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
+    return c.text(result.error.message, status);
   }
+  const placeImage = result.value;
 
   const imgixParams = buildImgixParams(w, h, placeImage.credits);
   const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
