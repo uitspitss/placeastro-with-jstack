@@ -18,11 +18,9 @@ const edgeCache = createMiddleware<HonoEnv>(async (c, next) => {
 
     const cached = await cache.match(cacheKey);
     if (cached) {
-      console.log('[cache] HIT', c.req.url);
       return new Response(cached.body, cached);
     }
 
-    console.log('[cache] MISS', c.req.url);
     await next();
 
     if (c.res.ok) {
@@ -34,8 +32,7 @@ const edgeCache = createMiddleware<HonoEnv>(async (c, next) => {
       );
       c.executionCtx.waitUntil(cache.put(cacheKey, cachedResponse));
     }
-  } catch (e) {
-    console.error('[cache] error:', e);
+  } catch {
     await next();
   }
 });
