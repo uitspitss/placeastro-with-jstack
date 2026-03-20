@@ -1,12 +1,37 @@
 import { drizzle } from 'drizzle-orm/d1';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
+import { createMiddleware } from 'hono/factory';
 import { trackPageview } from '../lib/umami';
 import type { HonoEnv } from '../orpc';
 import {
   getPlaceImageByKey,
   listPlaceImages,
 } from '../services/place-image-service';
+
+const CACHE_TTL_SECONDS = 3600;
+
+const edgeCache = createMiddleware<HonoEnv>(async (c, next) => {
+  const cache = (caches as unknown as { default: Cache }).default;
+  const cacheKey = new Request(c.req.url, { method: 'GET' });
+
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return new Response(cached.body, cached);
+  }
+
+  await next();
+
+  if (c.res.ok) {
+    const response = c.res.clone();
+    const cachedResponse = new Response(response.body, response);
+    cachedResponse.headers.set(
+      'Cache-Control',
+      `public, s-maxage=${CACHE_TTL_SECONDS}`,
+    );
+    c.executionCtx.waitUntil(cache.put(cacheKey, cachedResponse));
+  }
+});
 
 function buildImgixParams(
   w: string,
@@ -43,7 +68,7 @@ function sendTracking(c: Context<HonoEnv, any>, url: string) {
 }
 
 // GET /random — must be registered before /:catalogue/:catalogueNumber
-imageRoutes.get('/random', async (c) => {
+imageRoutes.get('/random', edgeCache, async (c) => {
   sendTracking(c, '/random');
   const w = c.req.query('w') ?? '400';
   const h = c.req.query('h') ?? '400';
@@ -69,29 +94,23 @@ imageRoutes.get('/random', async (c) => {
   return new Response(await resImage.arrayBuffer(), {
     headers: {
       'Content-Type': contentType,
-      'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30',
     },
   });
 });
 
 // GET /:catalogue/:catalogueNumber/info
-imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
+imageRoutes.get('/:catalogue/:catalogueNumber/info', edgeCache, async (c) => {
   const { catalogue, catalogueNumber } = c.req.param();
   sendTracking(c, `/${catalogue}/${catalogueNumber}/info`);
   const upper = catalogue.toUpperCase();
 
-  if (upper !== 'M' && upper !== 'NGC') {
-    return c.text('Not found catalogue', 404);
-  }
-
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(
-    db,
-    `${upper}/${catalogueNumber}`,
-  );
-  if (!placeImage) {
-    return c.text('Not found image', 404);
+  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  if (result.isErr()) {
+    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
+    return c.text(result.error.message, status);
   }
+  const placeImage = result.value;
 
   return c.json(
     {
@@ -100,30 +119,25 @@ imageRoutes.get('/:catalogue/:catalogueNumber/info', async (c) => {
       name: `${placeImage.catalogue}${placeImage.catalogueNumber}`,
     },
     200,
-    { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' },
   );
 });
 
 // GET /:catalogue/:catalogueNumber — proxy image from imgix
-imageRoutes.get('/:catalogue/:catalogueNumber', async (c) => {
+imageRoutes.get('/:catalogue/:catalogueNumber', edgeCache, async (c) => {
   const { catalogue, catalogueNumber } = c.req.param();
   sendTracking(c, `/${catalogue}/${catalogueNumber}`);
   const w = c.req.query('w') ?? '400';
   const h = c.req.query('h') ?? '400';
 
   const upper = catalogue.toUpperCase();
-  if (upper !== 'M' && upper !== 'NGC') {
-    return c.text('Not found catalogue', 404);
-  }
 
   const db = drizzle(c.env.DB);
-  const placeImage = await getPlaceImageByKey(
-    db,
-    `${upper}/${catalogueNumber}`,
-  );
-  if (!placeImage) {
-    return c.text('Not found image', 404);
+  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
+  if (result.isErr()) {
+    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
+    return c.text(result.error.message, status);
   }
+  const placeImage = result.value;
 
   const imgixParams = buildImgixParams(w, h, placeImage.credits);
   const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
@@ -135,7 +149,6 @@ imageRoutes.get('/:catalogue/:catalogueNumber', async (c) => {
   return new Response(await resImage.arrayBuffer(), {
     headers: {
       'Content-Type': contentType,
-      'Cache-Control': 'public, s-maxage=10, stale-while-revalidate=30',
     },
   });
 });
