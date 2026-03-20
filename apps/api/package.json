@@ -6,7 +6,7 @@
   "main": "./src/client-types.ts",
   "types": "./src/client-types.ts",
   "scripts": {
-    "dev": "pnpm run migrate:local; wrangler dev --local --persist-to .wrangler/state",
+    "dev": "pnpm run migrate:local; portless run --name api -- sh -c 'wrangler dev --local --persist-to .wrangler/state --port $PORT'",
     "migrate:local": "wrangler d1 execute DB --local --file=../../packages/database/drizzle/0000_init.sql; wrangler d1 execute DB --local --file=../../packages/database/drizzle/0001_auth.sql; wrangler d1 execute DB --local --file=../../packages/database/drizzle/seed.sql",
     "dev:remote": "wrangler dev --env production",
     "build": "wrangler deploy --env production --dry-run --outdir dist",
