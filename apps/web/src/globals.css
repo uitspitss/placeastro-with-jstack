@@ -5,77 +5,64 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* REF: https://ui.shadcn.com/docs/tailwind-v4 */
 :root {
+  --font-display: "Crimson Pro", Georgia, serif;
+  --font-body: "Outfit", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
   --background: hsl(0 0% 100%);
-  --foreground: hsl(240 6% 10%);
+  --foreground: hsl(220 20% 10%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(240 10% 4%);
+  --card-foreground: hsl(220 20% 10%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(240 10% 4%);
-  --primary: hsl(240 6% 10%);
-  --primary-foreground: hsl(0 0% 98%);
-  --secondary: hsl(240 5% 96%);
-  --secondary-foreground: hsl(240 6% 10%);
-  --muted: hsl(240 5% 96%);
-  --muted-foreground: hsl(240 4% 46%);
-  --accent: hsl(240 5% 96%);
-  --accent-foreground: hsl(240 6% 10%);
+  --popover-foreground: hsl(220 20% 10%);
+  --primary: hsl(36 72% 54%);
+  --primary-foreground: hsl(220 30% 6%);
+  --secondary: hsl(220 14% 94%);
+  --secondary-foreground: hsl(220 20% 10%);
+  --muted: hsl(220 14% 94%);
+  --muted-foreground: hsl(220 10% 46%);
+  --accent: hsl(36 72% 54%);
+  --accent-foreground: hsl(220 30% 6%);
   --destructive: hsl(0 72% 51%);
   --destructive-foreground: hsl(0 86% 97%);
-  --border: hsl(240 6% 90%);
-  --input: hsl(240 6% 90%);
-  --ring: hsl(240 6% 10%);
-  --radius: hsl(0.5rem);
-  --chart-1: hsl(173 58% 39%);
-  --chart-2: hsl(12 76% 61%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5% 26%);
-  --sidebar-primary: hsl(240 6% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 5% 96%);
-  --sidebar-accent-foreground: hsl(240 6% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(240 5% 65%);
+  --border: hsl(220 14% 88%);
+  --input: hsl(220 14% 88%);
+  --ring: hsl(36 72% 54%);
+  --radius: 0.5rem;
+  --chart-1: hsl(36 72% 54%);
+  --chart-2: hsl(200 60% 50%);
+  --chart-3: hsl(160 50% 40%);
+  --chart-4: hsl(280 50% 55%);
+  --chart-5: hsl(20 80% 60%);
 }
 
 .dark {
-  --background: hsl(240 10% 4%);
-  --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 4%);
-  --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(240 10% 4%);
-  --popover-foreground: hsl(0 0% 98%);
-  --primary: hsl(0 0% 98%);
-  --primary-foreground: hsl(240 6% 10%);
-  --secondary: hsl(240 4% 16%);
-  --secondary-foreground: hsl(0 0% 98%);
-  --muted: hsl(240 4% 16%);
-  --muted-foreground: hsl(240 5% 65%);
-  --accent: hsl(240 4% 16%);
-  --accent-foreground: hsl(0 0% 98%);
-  --destructive: hsl(0 63% 31%);
+  --background: hsl(222 50% 4%);
+  --foreground: hsl(220 20% 92%);
+  --card: hsl(222 40% 7%);
+  --card-foreground: hsl(220 20% 92%);
+  --popover: hsl(222 40% 7%);
+  --popover-foreground: hsl(220 20% 92%);
+  --primary: hsl(36 72% 54%);
+  --primary-foreground: hsl(222 50% 4%);
+  --secondary: hsl(222 30% 12%);
+  --secondary-foreground: hsl(220 20% 92%);
+  --muted: hsl(222 30% 12%);
+  --muted-foreground: hsl(220 15% 55%);
+  --accent: hsl(36 72% 54%);
+  --accent-foreground: hsl(222 50% 4%);
+  --destructive: hsl(0 63% 45%);
   --destructive-foreground: hsl(0 86% 97%);
-  --border: hsl(240 4% 16%);
-  --input: hsl(240 4% 16%);
-  --ring: hsl(240 5% 84%);
-  --radius: hsl(0.5rem);
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(340 75% 55%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(160 60% 45%);
-  --sidebar-background: hsl(240 6% 10%);
-  --sidebar-foreground: hsl(240 5% 96%);
-  --sidebar-primary: hsl(224 76% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 4% 16%);
-  --sidebar-accent-foreground: hsl(240 5% 96%);
-  --sidebar-border: hsl(240 4% 16%);
-  --sidebar-ring: hsl(240 5% 84%);
+  --border: hsl(222 25% 16%);
+  --input: hsl(222 25% 16%);
+  --ring: hsl(36 72% 54%);
+  --radius: 0.5rem;
+  --chart-1: hsl(36 72% 54%);
+  --chart-2: hsl(200 60% 50%);
+  --chart-3: hsl(160 50% 50%);
+  --chart-4: hsl(280 50% 60%);
+  --chart-5: hsl(20 80% 60%);
 }
 
 @theme inline {
@@ -106,12 +93,159 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+/* Base styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Star field animation */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes twinkle-slow {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.star-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.star-field::before,
+.star-field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.star-field::before {
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, hsl(36 60% 80% / 0.8), transparent),
+    radial-gradient(1px 1px at 25% 35%, hsl(220 20% 90% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 40% 10%, hsl(36 72% 70% / 0.9), transparent),
+    radial-gradient(1px 1px at 55% 55%, hsl(220 20% 85% / 0.5), transparent),
+    radial-gradient(1px 1px at 70% 25%, hsl(220 20% 90% / 0.7), transparent),
+    radial-gradient(1.5px 1.5px at 85% 45%, hsl(36 60% 75% / 0.6), transparent),
+    radial-gradient(1px 1px at 15% 70%, hsl(220 20% 88% / 0.5), transparent),
+    radial-gradient(1px 1px at 30% 85%, hsl(36 50% 80% / 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 50% 40%, hsl(220 20% 92% / 0.8), transparent),
+    radial-gradient(1px 1px at 65% 75%, hsl(220 20% 85% / 0.5), transparent),
+    radial-gradient(1px 1px at 80% 90%, hsl(36 60% 78% / 0.6), transparent),
+    radial-gradient(1px 1px at 90% 60%, hsl(220 20% 90% / 0.4), transparent),
+    radial-gradient(1px 1px at 5% 50%, hsl(220 20% 86% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 45% 95%, hsl(36 72% 65% / 0.7), transparent),
+    radial-gradient(1px 1px at 75% 5%, hsl(220 20% 90% / 0.5), transparent),
+    radial-gradient(1px 1px at 95% 30%, hsl(36 50% 82% / 0.4), transparent);
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.star-field::after {
+  background-image: radial-gradient(
+      1px 1px at 8% 42%,
+      hsl(220 20% 88% / 0.5),
+      transparent
+    ), radial-gradient(1px 1px at 22% 18%, hsl(36 60% 76% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 38% 62%, hsl(220 20% 90% / 0.7), transparent),
+    radial-gradient(1px 1px at 52% 8%, hsl(36 50% 80% / 0.4), transparent),
+    radial-gradient(1px 1px at 68% 48%, hsl(220 20% 86% / 0.6), transparent),
+    radial-gradient(1px 1px at 82% 72%, hsl(36 72% 68% / 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 92% 15%, hsl(220 20% 92% / 0.8), transparent),
+    radial-gradient(1px 1px at 18% 88%, hsl(36 60% 80% / 0.4), transparent),
+    radial-gradient(1px 1px at 35% 52%, hsl(220 20% 85% / 0.5), transparent),
+    radial-gradient(1px 1px at 48% 78%, hsl(36 50% 75% / 0.6), transparent),
+    radial-gradient(1.5px 1.5px at 62% 32%, hsl(220 20% 90% / 0.7), transparent),
+    radial-gradient(1px 1px at 78% 58%, hsl(36 72% 72% / 0.4), transparent);
+  animation: twinkle-slow 6s ease-in-out infinite 2s;
+}
+
+/* Nebula glow */
+.nebula-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(
+      ellipse 60% 40% at 20% 80%,
+      hsl(36 72% 54% / 0.03),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 50% 50% at 80% 20%,
+      hsl(220 60% 40% / 0.04),
+      transparent
+    );
+}
+
+/* Grain overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Code snippet styling */
+.code-card {
+  position: relative;
+  border: 1px solid hsl(222 25% 16%);
+  background: hsl(222 40% 5%);
+  transition: all 0.3s ease;
+}
+
+.code-card:hover {
+  border-color: hsl(36 72% 54% / 0.3);
+  box-shadow: 0 0 20px hsl(36 72% 54% / 0.05);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(222 40% 7%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(222 25% 20%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(222 25% 28%);
 }
