@@ -70,5 +70,6 @@ temp/
 # Playwright
 .playwright-mcp/
 
-# wtp worktrees
-*-worktrees/
+
+# superpowers plans
+docs/superpowers/
