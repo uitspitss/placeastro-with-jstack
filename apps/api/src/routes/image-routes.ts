@@ -12,24 +12,31 @@ import {
 const CACHE_TTL_SECONDS = 3600;
 
 const edgeCache = createMiddleware<HonoEnv>(async (c, next) => {
-  const cache = (caches as unknown as { default: Cache }).default;
-  const cacheKey = new Request(c.req.url, { method: 'GET' });
+  try {
+    const cache = (caches as unknown as { default: Cache }).default;
+    const cacheKey = new Request(c.req.url, { method: 'GET' });
 
-  const cached = await cache.match(cacheKey);
-  if (cached) {
-    return new Response(cached.body, cached);
-  }
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      console.log('[cache] HIT', c.req.url);
+      return new Response(cached.body, cached);
+    }
 
-  await next();
+    console.log('[cache] MISS', c.req.url);
+    await next();
 
-  if (c.res.ok) {
-    const response = c.res.clone();
-    const cachedResponse = new Response(response.body, response);
-    cachedResponse.headers.set(
-      'Cache-Control',
-      `public, s-maxage=${CACHE_TTL_SECONDS}`,
-    );
-    c.executionCtx.waitUntil(cache.put(cacheKey, cachedResponse));
+    if (c.res.ok) {
+      const response = c.res.clone();
+      const cachedResponse = new Response(response.body, response);
+      cachedResponse.headers.set(
+        'Cache-Control',
+        `public, s-maxage=${CACHE_TTL_SECONDS}`,
+      );
+      c.executionCtx.waitUntil(cache.put(cacheKey, cachedResponse));
+    }
+  } catch (e) {
+    console.error('[cache] error:', e);
+    await next();
   }
 });
 
