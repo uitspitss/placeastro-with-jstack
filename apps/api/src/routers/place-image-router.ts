@@ -14,7 +14,7 @@ export const placeImageRouter = {
   health: publicProcedure.handler(async () => 'OK' as const),
 
   list: publicProcedure.handler(async ({ context }) => {
-    return listPlaceImages(context.db);
+    return unwrapOrThrow(await listPlaceImages(context.db));
   }),
 
   getByKey: publicProcedure
