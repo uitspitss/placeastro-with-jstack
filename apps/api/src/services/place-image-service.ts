@@ -8,42 +8,55 @@ import type {
 } from '@placeastro/shared';
 import { and, desc, eq } from 'drizzle-orm';
 import type { DrizzleD1Database } from 'drizzle-orm/d1';
-import { type Result, ResultAsync, err, ok } from 'neverthrow';
+import { ResultAsync, errAsync, okAsync } from 'neverthrow';
 
-export async function listPlaceImages(db: DrizzleD1Database) {
-  return db.select().from(placeImages).orderBy(desc(placeImages.createdAt));
+export function listPlaceImages(
+  db: DrizzleD1Database,
+): ResultAsync<(typeof placeImages.$inferSelect)[], PlaceImageError> {
+  return ResultAsync.fromPromise(
+    db.select().from(placeImages).orderBy(desc(placeImages.createdAt)),
+    (e) => ({ type: 'DB_ERROR' as const, message: String(e) }),
+  );
 }
 
-export async function getPlaceImageByKey(
+export function getPlaceImageByKey(
   db: DrizzleD1Database,
   key: string,
-): Promise<Result<typeof placeImages.$inferSelect, PlaceImageError>> {
+): ResultAsync<typeof placeImages.$inferSelect, PlaceImageError> {
   const [catalogue, catalogueNumber] = key.split('/');
   if (!catalogue || !catalogueNumber) {
-    return err({ type: 'INVALID_KEY', message: `Invalid key format: ${key}` });
+    return errAsync({
+      type: 'INVALID_KEY',
+      message: `Invalid key format: ${key}`,
+    });
   }
   if (catalogue !== 'M' && catalogue !== 'NGC') {
-    return err({
+    return errAsync({
       type: 'INVALID_KEY',
       message: `Unknown catalogue: ${catalogue}`,
     });
   }
 
-  const results = await db
-    .select()
-    .from(placeImages)
-    .where(
-      and(
-        eq(placeImages.catalogue, catalogue as 'M' | 'NGC'),
-        eq(placeImages.catalogueNumber, catalogueNumber),
+  return ResultAsync.fromPromise(
+    db
+      .select()
+      .from(placeImages)
+      .where(
+        and(
+          eq(placeImages.catalogue, catalogue as 'M' | 'NGC'),
+          eq(placeImages.catalogueNumber, catalogueNumber),
+        ),
       ),
-    );
-
-  const image = results[0];
-  if (!image) {
-    return err({ type: 'NOT_FOUND', message: `Image not found: ${key}` });
-  }
-  return ok(image);
+    (e) => ({ type: 'DB_ERROR' as const, message: String(e) }),
+  ).andThen((results) => {
+    const image = results[0];
+    return image
+      ? okAsync(image)
+      : errAsync<never, PlaceImageError>({
+          type: 'NOT_FOUND',
+          message: `Image not found: ${key}`,
+        });
+  });
 }
 
 export function createPlaceImage(

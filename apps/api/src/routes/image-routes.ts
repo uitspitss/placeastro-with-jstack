@@ -1,7 +1,10 @@
+import type { PlaceImageError } from '@placeastro/shared';
 import { drizzle } from 'drizzle-orm/d1';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
 import { createMiddleware } from 'hono/factory';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
+import { ResultAsync, err, ok } from 'neverthrow';
 import { trackPageview } from '../lib/umami';
 import type { HonoEnv } from '../orpc';
 import {
@@ -54,6 +57,17 @@ function buildImgixParams(
   return p;
 }
 
+function errorToStatus(error: PlaceImageError): ContentfulStatusCode {
+  switch (error.type) {
+    case 'INVALID_KEY':
+      return 400;
+    case 'NOT_FOUND':
+      return 404;
+    default:
+      return 500;
+  }
+}
+
 export const imageRoutes = new Hono<HonoEnv>();
 
 // biome-ignore lint/suspicious/noExplicitAny: Hono Context generic variance
@@ -78,28 +92,37 @@ imageRoutes.get('/random', edgeCache, async (c) => {
   const h = c.req.query('h') ?? '400';
 
   const db = drizzle(c.env.DB);
-  const images = await listPlaceImages(db);
-  if (!images.length) {
-    return c.text('Not found images', 404);
-  }
-
-  const placeImage = images[Math.floor(Math.random() * images.length)];
-  if (!placeImage) {
-    return c.text('Not found image', 404);
-  }
-
-  const imgixParams = buildImgixParams(w, h, placeImage.credits);
-  const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
-  const contentType = resImage.headers.get('Content-Type');
-  if (!contentType) {
-    return c.text('Not found content type', 404);
-  }
-
-  return new Response(await resImage.arrayBuffer(), {
-    headers: {
-      'Content-Type': contentType,
-    },
-  });
+  return listPlaceImages(db)
+    .andThen((images) => {
+      const image = images[Math.floor(Math.random() * images.length)];
+      return image
+        ? ok(image)
+        : err<never, PlaceImageError>({
+            type: 'NOT_FOUND',
+            message: 'Not found images',
+          });
+    })
+    .andThen((placeImage) => {
+      const imgixParams = buildImgixParams(w, h, placeImage.credits);
+      return ResultAsync.fromSafePromise<Response, PlaceImageError>(
+        fetch(`${placeImage.url}?${imgixParams.toString()}`),
+      ).andThen((res) => {
+        const contentType = res.headers.get('Content-Type');
+        return contentType
+          ? ok({ res, contentType })
+          : err<never, PlaceImageError>({
+              type: 'NOT_FOUND',
+              message: 'Not found content type',
+            });
+      });
+    })
+    .match(
+      async ({ res, contentType }) =>
+        new Response(await res.arrayBuffer(), {
+          headers: { 'Content-Type': contentType },
+        }),
+      (error) => c.text(error.message, errorToStatus(error)),
+    );
 });
 
 // GET /:catalogue/:catalogueNumber/info
@@ -109,20 +132,17 @@ imageRoutes.get('/:catalogue/:catalogueNumber/info', edgeCache, async (c) => {
   const upper = catalogue.toUpperCase();
 
   const db = drizzle(c.env.DB);
-  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
-  if (result.isErr()) {
-    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
-    return c.text(result.error.message, status);
-  }
-  const placeImage = result.value;
-
-  return c.json(
-    {
-      credit: placeImage.credits,
-      sourceUrl: placeImage.sourceUrl,
-      name: `${placeImage.catalogue}${placeImage.catalogueNumber}`,
-    },
-    200,
+  return getPlaceImageByKey(db, `${upper}/${catalogueNumber}`).match(
+    (placeImage) =>
+      c.json(
+        {
+          credit: placeImage.credits,
+          sourceUrl: placeImage.sourceUrl,
+          name: `${placeImage.catalogue}${placeImage.catalogueNumber}`,
+        },
+        200,
+      ),
+    (error) => c.text(error.message, errorToStatus(error)),
   );
 });
 
@@ -136,23 +156,26 @@ imageRoutes.get('/:catalogue/:catalogueNumber', edgeCache, async (c) => {
   const upper = catalogue.toUpperCase();
 
   const db = drizzle(c.env.DB);
-  const result = await getPlaceImageByKey(db, `${upper}/${catalogueNumber}`);
-  if (result.isErr()) {
-    const status = result.error.type === 'INVALID_KEY' ? 400 : 404;
-    return c.text(result.error.message, status);
-  }
-  const placeImage = result.value;
-
-  const imgixParams = buildImgixParams(w, h, placeImage.credits);
-  const resImage = await fetch(`${placeImage.url}?${imgixParams.toString()}`);
-  const contentType = resImage.headers.get('Content-Type');
-  if (!contentType) {
-    return c.text('Not found content type', 404);
-  }
-
-  return new Response(await resImage.arrayBuffer(), {
-    headers: {
-      'Content-Type': contentType,
-    },
-  });
+  return getPlaceImageByKey(db, `${upper}/${catalogueNumber}`)
+    .andThen((placeImage) => {
+      const imgixParams = buildImgixParams(w, h, placeImage.credits);
+      return ResultAsync.fromSafePromise<Response, PlaceImageError>(
+        fetch(`${placeImage.url}?${imgixParams.toString()}`),
+      ).andThen((res) => {
+        const contentType = res.headers.get('Content-Type');
+        return contentType
+          ? ok({ res, contentType })
+          : err<never, PlaceImageError>({
+              type: 'NOT_FOUND',
+              message: 'Not found content type',
+            });
+      });
+    })
+    .match(
+      async ({ res, contentType }) =>
+        new Response(await res.arrayBuffer(), {
+          headers: { 'Content-Type': contentType },
+        }),
+      (error) => c.text(error.message, errorToStatus(error)),
+    );
 });

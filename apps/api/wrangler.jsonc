@@ -40,6 +40,7 @@
   // Production environment
   "env": {
     "production": {
+      "workers_dev": true,
       "vars": {
         "CORS_ORIGIN": "https://placeastro.u7s.dev",
         "BETTER_AUTH_URL": "https://placeastro.u7s.dev",
