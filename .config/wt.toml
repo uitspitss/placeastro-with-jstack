@@ -1,4 +1,4 @@
-[post-create]
+[post-start]
 trust = "mise trust"
 install = "ni"
 portless = "bash scripts/setup-portless-env.sh"
