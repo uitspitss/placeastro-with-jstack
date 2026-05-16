@@ -3,9 +3,9 @@ packages:
   - "packages/*"
 
 catalog:
-  hono: ^4.7.0
+  hono: ^4.12.19
   zod: ^4.0.0
-  drizzle-orm: ^0.39.0
+  drizzle-orm: ^0.45.2
   react: ^19.0.0
   react-dom: ^19.0.0
   neverthrow: ^8.2.0
