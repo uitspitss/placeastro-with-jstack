@@ -28,13 +28,5 @@
     "lefthook": "^2.1.4",
     "turbo": "^2.8.14",
     "typescript": "^5"
-  },
-  "pnpm": {
-    "overrides": {
-      "fast-xml-parser": "^5.8.0",
-      "fast-xml-builder": "^1.2.0",
-      "kysely": "^0.28.17",
-      "lodash": "^4.18.1"
-    }
   }
 }
