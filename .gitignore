@@ -73,3 +73,9 @@ temp/
 
 # superpowers plans
 docs/superpowers/
+
+# Vendored skill 同梱アプリの lockfile（製品ではない・Dependabot の churn 源のため追跡外）
+.claude/skills/**/package-lock.json
+.claude/skills/**/pnpm-lock.yaml
+.claude/skills/**/yarn.lock
+.claude/skills/**/node_modules/
