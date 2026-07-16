@@ -6,6 +6,7 @@
     "module": "ESNext",
     "jsx": "react-jsx",
     "types": ["vite/client"],
+    "declaration": false,
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "noUncheckedIndexedAccess": true,
