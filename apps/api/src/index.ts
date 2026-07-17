@@ -29,7 +29,7 @@ const app = new Hono<HonoEnv>();
 // Sentry は最初のミドルウェアとして登録し、後続のミドルウェア/ハンドラの
 // 未捕捉例外を捕捉しつつ、ルートパターン付きのトランザクション span を作る。
 const sentryMiddleware = sentry(app, (env) => ({
-  dsn: env.SENTRY_DSN!,
+  dsn: env.SENTRY_DSN,
   // エラー送信はサンプリング率に影響されない。トランザクション量が気になれば下げる。
   tracesSampleRate: 1.0,
 }));
