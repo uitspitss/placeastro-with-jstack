@@ -1,4 +1,5 @@
 /// <reference path="./types/worker-configuration.d.ts" />
+/// <reference path="./types/sentry-env.d.ts" />
 
 import { os, ORPCError } from '@orpc/server';
 import { drizzle } from 'drizzle-orm/d1';
