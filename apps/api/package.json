@@ -25,6 +25,8 @@
     "@orpc/server": "^1.4.3",
     "@placeastro/database": "workspace:*",
     "@placeastro/shared": "workspace:*",
+    "@sentry/cloudflare": "catalog:",
+    "@sentry/hono": "catalog:",
     "better-auth": "^1.6.13",
     "drizzle-orm": "catalog:",
     "hono": "catalog:",
