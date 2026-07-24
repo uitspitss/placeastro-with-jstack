@@ -5,7 +5,7 @@ packages:
 catalog:
   "@sentry/cloudflare": ^10.66.0
   "@sentry/hono": ^10.66.0
-  hono: ^4.12.25
+  hono: ^4.12.27
   zod: ^4.0.0
   drizzle-orm: ^0.45.2
   react: ^19.0.0
