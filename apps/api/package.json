@@ -27,7 +27,7 @@
     "@placeastro/shared": "workspace:*",
     "@sentry/cloudflare": "catalog:",
     "@sentry/hono": "catalog:",
-    "better-auth": "^1.6.13",
+    "better-auth": "^1.6.22",
     "drizzle-orm": "catalog:",
     "hono": "catalog:",
     "neverthrow": "catalog:",
