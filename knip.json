@@ -11,7 +11,13 @@
   },
   "workspaces": {
     "apps/web": {
-      "project": ["src/**/*.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}", "e2e/**/*.ts"],
+      "playwright": {
+        "config": ["playwright.config.ts"],
+        // 既定の entry は *.spec.ts だけなので、setup project の
+        // *.setup.ts を足さないと未使用ファイル扱いになる
+        "entry": ["e2e/**/*.{spec,setup}.ts"]
+      },
       "ignoreDependencies": [
         "tailwindcss",
         "tw-animate-css"
