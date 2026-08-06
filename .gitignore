@@ -79,3 +79,6 @@ docs/superpowers/
 .claude/skills/**/pnpm-lock.yaml
 .claude/skills/**/yarn.lock
 .claude/skills/**/node_modules/
+
+*storybook.log
+storybook-static
