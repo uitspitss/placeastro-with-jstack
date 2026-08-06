@@ -8,6 +8,9 @@ import { fn } from 'storybook/test';
  * 実 API を叩く経路がブラウザに載ってしまう。
  *
  * placeImages ルーターに手続きを足したら、ここにも足すこと。
+ *
+ * client.ts の resolveRpcUrl は意図的に持たせていない（ストーリーから
+ * 使う経路が無いため）。使うコンポーネントを足したらここにも足すこと。
  */
 export const client = {
   placeImages: {

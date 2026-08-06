@@ -21,12 +21,10 @@ export default defineConfig({
         test: {
           name: 'unit',
           environment: 'happy-dom',
-          include: [
-            'src/**/*.test.ts',
-            'src/**/*.test.tsx',
-            'src/**/*.spec.ts',
-            'src/**/*.spec.tsx',
-          ],
+          // unit は `.test.*`、E2E（Playwright）は e2e/ の `.spec.ts`。
+          // Playwright の既定 testMatch は `*.spec.ts` も拾うので、
+          // 拡張子とディレクトリの両方で取り合いを塞いでおく
+          include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
         },
       },
       {

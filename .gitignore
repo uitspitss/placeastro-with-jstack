@@ -69,6 +69,15 @@ temp/
 
 # Playwright
 .playwright-mcp/
+# apps/web 配下に出る。biome の vcs.useIgnoreFile がサブディレクトリから
+# 効くよう、パス先頭にスラッシュを付けない
+test-results/
+playwright-report/
+blob-report/
+# スラッシュを含むパターンはリポジトリルート起点になるので **/ を付ける
+**/playwright/.cache/
+# 有効なセッション Cookie が入る
+**/e2e/.auth/
 
 
 # superpowers plans
