@@ -41,6 +41,22 @@
 - テストを先に書き、実装はテストが通るように行う
 - services のテストでは repository をモックして単体テストする
 
+## Storybook
+
+- `apps/web/.storybook` に1つだけ置き、`packages/ui` のストーリーもここから拾う
+- ストーリーは対象と同じ場所に置く（`foo.tsx` の隣に `foo.stories.tsx`）
+- `nr storybook` で dev サーバー、`nr build-storybook` で静的ビルド
+- `nr test` は unit と storybook の2プロジェクトを回す
+  （`nr test:unit` / `nr test:storybook` で個別実行）
+- `play` は「描画結果だけでは分からないこと」にだけ書く。
+  インタラクション・aria 属性・CSS 由来の状態・非同期表示
+- AI が書いたストーリーには `tags: ['ai-generated']` を付ける
+- **`@/lib/client` に手続きを足したら `apps/web/src/lib/__mocks__/client.js`
+  にも足す。** ストーリーは実 API を叩かないよう `.storybook/main.ts` の
+  `mockModules` プラグインでこのモックへ差し替えている
+- ストーリーからしか使わない依存を足したら `.storybook/main.ts` の
+  `optimizeDepsInclude` に加える。入れないとテスト中のリロードでテストが落ちる
+
 ## パッケージ間の依存関係
 
 - `@placeastro/shared` は `apps/web` と `apps/api` の両方から参照可能
