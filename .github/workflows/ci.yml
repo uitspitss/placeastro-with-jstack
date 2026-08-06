@@ -12,8 +12,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
       - run: nci
+      # storybook プロジェクトは Chromium 実機で走るのでバイナリを先に入れる
+      - name: Install Playwright browser
+        working-directory: apps/web
+        run: na exec playwright install --with-deps chromium
       - run: nr lint
       - run: nr typecheck
       - run: nr test
       - run: nr build
+      - run: nr build-storybook
       - run: nr knip

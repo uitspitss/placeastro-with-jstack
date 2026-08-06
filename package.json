@@ -6,7 +6,9 @@
   "packageManager": "pnpm@10.9.0",
   "scripts": {
     "build": "turbo run build",
+    "build-storybook": "turbo run build-storybook",
     "dev": "turbo run dev",
+    "storybook": "turbo run storybook",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
