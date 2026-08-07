@@ -6,14 +6,21 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  # commit-status の publish に要る。無いと warning を出してスキップされる
+  statuses: write
 
 jobs:
   react-doctor:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: millionco/react-doctor@main
+      - uses: actions/checkout@v7
+        with:
+          # 浅いチェックアウトだと base に到達できず、既定の scope: changed が
+          # 「変更ファイル内の全指摘」に退化する（PR が持ち込んだ分だけを見られない）
+          fetch-depth: 0
+      - uses: millionco/react-doctor@v2
         continue-on-error: true
         with:
           directory: apps/web
-          fail-on: none
+          # fail-on という入力は存在しない。正しくは blocking（既定も none）
+          blocking: none
