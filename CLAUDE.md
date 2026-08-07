@@ -57,6 +57,28 @@
 - ストーリーからしか使わない依存を足したら `.storybook/main.ts` の
   `optimizeDepsInclude` に加える。入れないとテスト中のリロードでテストが落ちる
 
+## E2E (Playwright)
+
+- `apps/web/e2e` に置き、`apps/web/playwright.config.ts` から回す
+- 命名は unit が `*.test.ts`、E2E が `*.spec.ts`。Vitest と Playwright が
+  同じファイルを取り合わないよう、ディレクトリと拡張子の両方で分けている
+- `apps/web` で `nr test:e2e`（前段で `db:e2e:prepare` が走る）。UI は `nr test:e2e:ui`。
+  **turbo タスクにも `nr test` にもルートの scripts にも足さない** —
+  サーバー起動と DB の状態に依存するのでキャッシュしてはいけない
+- `webServer` は2本。API は `wrangler dev`、web は `vite build && vite preview`。
+  dev サーバーを使わないのは、オンデマンドコンパイルの待ちが
+  「要素が見つからない」として現れて原因が分からなくなるため
+- ポートは web 3100 / API 3101。開発サーバーとずらして、
+  `nr dev` を上げたまま回しても開発用 D1 を見に行かないようにしている
+- **D1 は `--persist-to .wrangler/e2e-state` で開発用の `.wrangler/state` と分ける。**
+  `e2e/prepare-db.ts` が毎回このディレクトリを捨てて migration と seed を流し直す
+- migration/seed は Playwright の**外**（`test:e2e` の前段）で流す。
+  setup project も globalSetup も `webServer` 起動より後なので間に合わない
+- 認証は `e2e/auth.setup.ts` が better-auth の API を直接叩き、
+  `e2e/.auth/user.json` に storageState を保存する（`/sign-up` は画面として閉じているため）
+- E2E に書くのは「サーバー・認証・DB を貫く経路」だけ。
+  表示のバリエーションは Storybook、分岐網羅は unit に置く
+
 ## パッケージ間の依存関係
 
 - `@placeastro/shared` は `apps/web` と `apps/api` の両方から参照可能

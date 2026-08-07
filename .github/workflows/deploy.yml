@@ -7,7 +7,7 @@ jobs:
   deploy-api:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@v2
       - run: nci
       - run: nr typecheck
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-api
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: jdx/mise-action@v2
       - run: nci
       - run: nlx turbo run build --filter=@placeastro/web
