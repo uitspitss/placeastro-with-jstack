@@ -11,8 +11,10 @@
  * 揃えてしまうと `nr dev` を上げたまま E2E を回したときに
  * 開発用の D1 に対してテストが走り、状態を分けた意味が消える。
  */
-export const E2E_WEB_PORT = process.env.E2E_WEB_PORT ?? '3100';
-export const E2E_API_PORT = process.env.E2E_API_PORT ?? '3101';
+// ?? ではなく || 。空文字で渡ってきたときも既定値に落とす
+// （?? だと `http://localhost:` という壊れた URL になる）
+export const E2E_WEB_PORT = process.env.E2E_WEB_PORT || '3100';
+export const E2E_API_PORT = process.env.E2E_API_PORT || '3101';
 
 export const E2E_BASE_URL = `http://localhost:${E2E_WEB_PORT}`;
 export const E2E_API_URL = `http://localhost:${E2E_API_PORT}`;
