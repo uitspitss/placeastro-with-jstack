@@ -10,12 +10,17 @@ import type { AppRouter } from '@placeastro/api';
  *
  * VITE_API_URL が空のときは vite の proxy 越しに同一オリジンへ出すのが意図なので、
  * ここで origin を補って絶対 URL にする。
+ *
+ * base ではなく連結で組むのは、auth-client の baseURL と同じく
+ * VITE_API_URL のパスまで含めて前置きにするため（`new URL('/api/rpc', apiUrl)`
+ * だとパス付きの値を渡したときにパスが落ちる）。
  */
 export function resolveRpcUrl(
   apiUrl: string | undefined,
   origin: string,
 ): string {
-  return new URL(apiUrl ? `${apiUrl}/api/rpc` : '/api/rpc', origin).toString();
+  const prefix = apiUrl?.replace(/\/$/, '');
+  return new URL(prefix ? `${prefix}/api/rpc` : '/api/rpc', origin).toString();
 }
 
 const link = new RPCLink({
