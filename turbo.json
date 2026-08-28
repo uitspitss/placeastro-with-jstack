@@ -5,6 +5,9 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      // turbo 2 の envMode は既定で strict。ここに書かないと
+      // CI で渡した VITE_API_URL が vite まで届かず、黙って空になる
+      "env": ["VITE_API_URL"],
       "outputs": ["dist/**"]
     },
     "dev": {

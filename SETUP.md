@@ -52,6 +52,20 @@ pnpm dev:web  # Webのみ (port 3000)
 ### Web設定 (`apps/web/.env.local`)
 - `VITE_API_URL`: 開発時は空 (Viteプロキシ経由)、本番は API の URL を指定
 
+### 本番ビルドの `VITE_API_URL`
+`apps/web/.env.production` は gitignore なのでリポジトリには入っていない。
+ローカルで `vite build` する場合は自分で置く（1行）:
+
+```
+VITE_API_URL=https://placeastro.u7s.dev
+```
+
+CI (`.github/workflows/deploy.yml`) はこのファイルを持たないので、
+GitHub の **Settings → Secrets and variables → Actions → Variables** に
+`VITE_API_URL` を登録して渡している。秘密ではないので secrets ではなく variables。
+turbo は envMode が strict なので `turbo.json` の build タスクにも
+`"env": ["VITE_API_URL"]` の宣言が要る（無いと黙って空になる）。
+
 ## よく使うコマンド
 
 ```bash
