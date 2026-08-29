@@ -32,7 +32,7 @@ yarn-error.log*
 # local env files
 .env*.local
 .env.keys
-# 本番 URL は CI の変数から渡す（deploy.yml 参照）。
+# 本番 URL は CI の変数から渡す（.github/workflows/ci.yml の deploy-web 参照）。
 # ローカルには置いたままでよく、vite build がそのまま拾う
 .env.production
 .dev.vars
