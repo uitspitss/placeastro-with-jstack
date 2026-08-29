@@ -86,9 +86,10 @@ blob-report/
 # superpowers plans
 docs/superpowers/
 
-# Claude Code のローカル設定と、第三者配布の vendored skill。
+# エージェントのローカル設定と、第三者配布の vendored skill。
 # どちらもこの製品ではないので追跡しない（各自ローカルに置く前提）
 .claude/
+.agents/
 
 *storybook.log
 storybook-static
