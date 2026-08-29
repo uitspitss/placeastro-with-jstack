@@ -40,6 +40,8 @@
   // Production environment
   "env": {
     "production": {
+      // 省くと wrangler は "placeastro-api-production" という別ワーカーを作る
+      "name": "placeastro-api",
       "workers_dev": true,
       "vars": {
         "CORS_ORIGIN": "https://placeastro.u7s.dev",
