@@ -10,11 +10,20 @@ mise install          # node / pnpm / ni をインストール
 ni                    # 依存関係
 cp apps/api/.dev.vars.example apps/api/.dev.vars   # 値は下記「環境変数」を参照
 nr types:generate     # wrangler types（Cloudflare.Env の型）
-nr db:migrate         # ローカル D1 にマイグレーション + seed
+nr db:migrate         # ローカル D1 にマイグレーション（seed は含まない）
+nr db:seed            # Messier カタログのシードを流す
 nr dev                # API + Web を同時起動
 ```
 
-`nr dev` のポートは portless が動的に割り当てる（web は 3000 固定）。
+`nr db:migrate` が呼ぶ `packages/database` の `migrate:local` は
+`0000_init.sql` と `0001_auth.sql` だけで、seed は `nr db:seed` が別に流す。
+（`apps/api` 側にも同名の `migrate:local` があり、そちらは seed まで流す。
+`nr dev` は API の dev がこれを呼ぶので、`nr dev` 経由なら seed も入る）
+
+ポートは portless が両方に動的に割り当てる（`portless run --name web vite` /
+`portless run --name api`）。実際の URL は `portless get web` / `portless get api`
+で引く。portless を使わない場合は vite の既定ポート、API は
+`apps/api/wrangler.jsonc` の `dev` 設定に従う。
 
 ## 環境変数
 
