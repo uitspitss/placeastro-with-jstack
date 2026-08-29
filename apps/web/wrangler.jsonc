@@ -19,6 +19,8 @@
   // Production environment
   "env": {
     "production": {
+      // 省くと wrangler は "placeastro-web-production" という別ワーカーを作る
+      "name": "placeastro-web",
       "routes": [
         {
           "pattern": "placeastro.u7s.dev/docs*",
