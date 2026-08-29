@@ -15,6 +15,9 @@
   "vars": {
     "CORS_ORIGIN": "http://localhost:3000",
     "BETTER_AUTH_URL": "http://localhost:3000",
+    // "true" のときだけ better-auth のサインアップが開く（lib/auth.ts）。
+    // E2E は既定 vars のまま wrangler dev を起動するのでここが効く
+    "ALLOW_SIGN_UP": "true",
     "IMGIX_HOSTNAME": "placeastro-dev.imgix.net",
     "R2_BUCKET": "placeastro-dev",
     "UMAMI_HOST": "https://cloud.umami.is",
@@ -46,6 +49,8 @@
       "vars": {
         "CORS_ORIGIN": "https://placeastro.u7s.dev",
         "BETTER_AUTH_URL": "https://placeastro.u7s.dev",
+        // 省いても閉じるが、閉じているのが意図だと分かるよう明示する
+        "ALLOW_SIGN_UP": "false",
         "IMGIX_HOSTNAME": "placeastro-r2.imgix.net",
         "R2_BUCKET": "placeastro",
         "UMAMI_HOST": "https://cloud.umami.is",
