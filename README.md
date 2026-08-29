@@ -1,6 +1,25 @@
 # PlaceAstro Monorepo
 
-Cloudflare Workers + Vite React を使用した天体写真共有プラットフォーム
+宇宙のプレースホルダー画像 API。Messier / NGC カタログの天体写真を、
+サイズを指定できる画像として配信する。
+
+**https://placeastro.u7s.dev**
+
+```html
+<img src="https://placeastro.u7s.dev/m/42?w=400" />
+```
+
+## エンドポイント
+
+| | |
+|---|---|
+| `GET /m/42` | Messier 42（オリオン大星雲） |
+| `GET /ngc/6543` | NGC カタログ（キャッツアイ星雲） |
+| `GET /random` | インデックス済みの中からランダムに1枚 |
+| `GET /m/42/info` | クレジットと出典を JSON で返す |
+
+`w` / `h` でサイズを指定する（既定は 400x400）。例: `/m/42?w=720&h=480`。
+画像には imgix でクレジットが焼き込まれる。
 
 ## Tech Stack
 
