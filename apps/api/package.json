@@ -37,6 +37,6 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240815.0",
     "typescript": "^5",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.11"
   }
 }

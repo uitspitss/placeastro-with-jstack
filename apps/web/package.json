@@ -80,7 +80,7 @@
     "tsx": "catalog:",
     "typescript": "^5",
     "vite": "^6.2.0",
-    "vitest": "^4.1.0",
+    "vitest": "^4.1.11",
     "wrangler": "^4.71.0"
   }
 }
